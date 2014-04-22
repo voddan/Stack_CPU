@@ -120,6 +120,12 @@ class Command_list : public list <Command*>, public Printable {
 			return stream.str();
 		}
 		
+		void compile(ostream& stream) {
+			for(Command_list::const_iterator iter = begin();
+				iter != end(); iter++){
+				(*iter)->compile(stream);
+			}
+		}
 };
 
 }
@@ -140,7 +146,7 @@ class Com_Arg : public Command{
 		virtual string to_string() const {
 			ostringstream str;
 			str << "Com_Arg(" << name() << ": "; 
-			str << _reg << ", "; 
+			str << _reg << " ~ "; 
 			str << _arg << ")";
 			return str.str();
 		}
@@ -149,8 +155,16 @@ class Com_Arg : public Command{
 		
 		virtual void compile(ostream& stream) {
 			wchar_t head = head_compil(true, code(), reg(), Reg(0), Reg(0));
-			stream.write((char*) &head , 2);
-			stream.write((char*) &_arg , 4);
+			
+			char* arr = (char*) &head;
+			stream.write(arr + 1, 1);
+			stream.write(arr + 0 , 1);
+			
+			arr = (char*) &_arg;
+			stream.write(arr + 3, 1);
+			stream.write(arr + 2 , 1);
+			stream.write(arr + 1 , 1);
+			stream.write(arr + 0 , 1);
 		}
 
 	private:
@@ -171,9 +185,9 @@ class Com_Non : public Command{
 		virtual string to_string() const {
 			ostringstream str;
 			str << "Com_Non(" << name() << ": "; 
-			str << _reg << " ~ "; 
-			str << _reg << ", "; 
-			str << _reg << ")"; 
+			str << _reg   << " ~ "; 
+			str << _reg_1 << ", "; 
+			str << _reg_2 << ")"; 
 			return str.str();
 		}
 		
@@ -181,7 +195,9 @@ class Com_Non : public Command{
 		
 		virtual void compile(ostream& stream) {
 			wchar_t head = head_compil(false, code(), reg(), reg_1(), reg_2());
-			stream.write((char*) &head , 2);
+			char* arr = (char*) &head;
+			stream.write(arr + 1, 1);
+			stream.write(arr + 0, 1);
 		}
 
 	private:
@@ -222,7 +238,7 @@ namespace command { // Commands with ARGuments
 	
 class SET : public Com_Arg{
 	public:
-		SET(Reg reg, int arg) : Com_Arg("set", 1, reg, arg) {}
+		SET(Reg reg, int arg) : Com_Arg("set", 3, reg, arg) {}
 		virtual ~SET() {}
 		
 		void execute() {
