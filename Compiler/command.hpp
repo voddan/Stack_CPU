@@ -35,6 +35,7 @@ struct Code : Printable{
 struct Reg : Printable{
 	Reg(int x) : val((assert(0 <= x && x < REG_SIZE), x)) {}
 	const int val;
+	int* reg() {return 0;}
 	virtual string to_string() const { 
 		ostringstream str;
 		str << std::hex << val;
@@ -89,13 +90,14 @@ class Command_list : public list <Command*>, public Printable {
 
 namespace command { // Com_Arg; Com_Non
 	
+// TODO: add adress modification
 class Com_Arg : public Command{
 	public:
-		Com_Arg(string name, int code, int reg, int arg)
-			: Command(name, code), _reg(Reg(reg)), _arg(arg) {}
+		Com_Arg(string name, int code, Reg reg, int arg)
+			: Command(name, code), _reg(reg), _arg(arg) {}
 		virtual ~Com_Arg() {}
 		
-		int 	reg() const {return _reg.val;}
+		Reg 	reg() const {return _reg;}
 		int 	arg() const {return _arg;}
 		
 		virtual string to_string() const {
@@ -115,14 +117,13 @@ class Com_Arg : public Command{
 
 class Com_Non : public Command{
 	public:
-		Com_Non(string name, int code, int reg, int reg_1, int reg_2)
-			: Command(name, code), 
-			_reg(Reg(reg)), _reg_1(Reg(reg_1)), _reg_2(Reg(reg_2))  {}
+		Com_Non(string name, int code, Reg reg, Reg reg_1, Reg reg_2) : Command(name, code), 
+			_reg(reg), _reg_1(reg_1), _reg_2(reg_2)  {}
 		virtual ~Com_Non() {}
 		
-		int 	reg() const {return _reg.val;}
-		int 	reg_1() const {return _reg_1.val;}
-		int 	reg_2() const {return _reg_2.val;}
+		Reg 	reg  () const {return _reg;}
+		Reg 	reg_1() const {return _reg_1;}
+		Reg 	reg_2() const {return _reg_2;}
 		
 		virtual string to_string() const {
 			ostringstream str;
@@ -140,6 +141,44 @@ class Com_Non : public Command{
 		const Reg _reg_1;
 		const Reg _reg_2;
 };	
+
+};
+
+namespace command { // Commands with NO arguments
+	
+class ADD : public Com_Non{
+	public:
+		ADD(Reg reg, Reg reg_1, Reg reg_2) : Com_Non("add", 1, reg, reg_1, reg_2) {}
+		virtual ~ADD() {}
+		
+		void execute() {
+			*reg().reg() = *reg_1().reg() + *reg_2().reg();
+		}
+};		
+
+class MOV : public Com_Non{
+	public:
+		MOV(Reg reg, Reg reg_1) : Com_Non("mov", 2, reg, reg_1, Reg(0)) {}
+		virtual ~MOV() {}
+		
+		void execute() {
+			*reg().reg() = *reg_1().reg();
+		}
+};		
+
+};
+
+namespace command { // Commands with ARGuments
+	
+class SET : public Com_Arg{
+	public:
+		SET(Reg reg, int arg) : Com_Arg("set", 1, reg, arg) {}
+		virtual ~SET() {}
+		
+		void execute() {
+			*reg().reg() = arg();
+		}
+};		
 
 };
 
