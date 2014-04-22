@@ -32,20 +32,32 @@ struct Code : Printable{
 };
 
 #define REG_SIZE 8
-struct Reg : Printable{
+struct Reg : Printable{ // POD
 	Reg(int x) : val((assert(0 <= x && x < REG_SIZE), x)) {}
+	//virtual ~Reg() {}
 	const int val;
+	
 	int* reg() {return 0;}
 	virtual string to_string() const { 
 		ostringstream str;
-		str << std::hex << val;
+		str << "(" << names[val] << ")";
 		return str.str();
 	}
-};
 	
+	private:
+		static const string names[REG_SIZE];
+};
+
+const string Reg::names[] = {
+	"--", "aa", "bb", "cc", "dd", "xx", "yy", "zz"
+};
+
 }
+////////////////////////////////////////////////////////////////////////
 
 namespace command { // Command; Command_list
+	
+#define bytes(xx, y) (( (xx) << (sizeof(xx) * 8 - (y)) ) >> (sizeof(xx) * 8 - (y)) )
 	
 class Command : public Printable{
 	public:
@@ -58,6 +70,30 @@ class Command : public Printable{
 		
 		virtual string to_string() const {return "Command(" + _name + ")";}
 		//----------------
+		
+		virtual void compile(ostream&) = 0;
+		//TODO: use bytes()
+		static wchar_t head_compil(bool has_arg, Code code, Reg r1, Reg r2, Reg r3) {
+			wchar_t arr = 0;
+			assert(CODE_SIZE == 64);
+			assert(REG_SIZE == 8);
+			
+			if(has_arg) arr |= (1 << (7 + 8));
+			
+			assert(0 <= code.val && code.val < CODE_SIZE);
+			arr |= (code.val << (1 + 8));
+			
+			assert(0 <= r1.val && r1.val < REG_SIZE); 
+			arr |= (r1.val << (6));
+			
+			assert(0 <= r2.val && r2.val < REG_SIZE); 
+			arr |= (r2.val << (3));
+			
+			assert(0 <= r3.val && r3.val < REG_SIZE); 
+			arr |= (r3.val << (0));
+			
+			return arr;
+		}
 
 	private:
 		const string _name;
@@ -87,6 +123,7 @@ class Command_list : public list <Command*>, public Printable {
 };
 
 }
+////////////////////////////////////////////////////////////////////////
 
 namespace command { // Com_Arg; Com_Non
 	
@@ -103,12 +140,18 @@ class Com_Arg : public Command{
 		virtual string to_string() const {
 			ostringstream str;
 			str << "Com_Arg(" << name() << ": "; 
-			str << _reg.to_string() << ", "; 
-			str << _arg		<< ")";
+			str << _reg << ", "; 
+			str << _arg << ")";
 			return str.str();
 		}
 		
 		//----------------
+		
+		virtual void compile(ostream& stream) {
+			wchar_t head = head_compil(true, code(), reg(), Reg(0), Reg(0));
+			stream.write((char*) &head , 2);
+			stream.write((char*) &_arg , 4);
+		}
 
 	private:
 		const Reg _reg;
@@ -128,13 +171,18 @@ class Com_Non : public Command{
 		virtual string to_string() const {
 			ostringstream str;
 			str << "Com_Non(" << name() << ": "; 
-			str << _reg.to_string() << " ~ "; 
-			str << _reg_1.to_string() << ", "; 
-			str << _reg_2.to_string() << ")"; 
+			str << _reg << " ~ "; 
+			str << _reg << ", "; 
+			str << _reg << ")"; 
 			return str.str();
 		}
 		
 		//----------------
+		
+		virtual void compile(ostream& stream) {
+			wchar_t head = head_compil(false, code(), reg(), reg_1(), reg_2());
+			stream.write((char*) &head , 2);
+		}
 
 	private:
 		const Reg _reg;
@@ -142,7 +190,8 @@ class Com_Non : public Command{
 		const Reg _reg_2;
 };	
 
-};
+}
+////////////////////////////////////////////////////////////////////////
 
 namespace command { // Commands with NO arguments
 	
@@ -166,7 +215,8 @@ class MOV : public Com_Non{
 		}
 };		
 
-};
+}
+////////////////////////////////////////////////////////////////////////
 
 namespace command { // Commands with ARGuments
 	
@@ -180,6 +230,7 @@ class SET : public Com_Arg{
 		}
 };		
 
-};
+}
+////////////////////////////////////////////////////////////////////////
 
 #endif // _COMMAND_HPP_
