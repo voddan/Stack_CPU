@@ -9,9 +9,9 @@
 #include <iostream>
 #include <fstream>
 
-#include "common_files/utils.hpp"
-#include "common_files/command.hpp"
-#include "common_files/command_set.hpp"
+#include <utils.hpp>
+#include <command_set.hpp>
+#include <command.hpp>
 
 using namespace std;
 using namespace utils;

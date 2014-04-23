@@ -12,9 +12,10 @@
 #include <iostream>
 #include <fstream>
 
-#include "common_files/utils.hpp"
-#include "common_files/command_set.hpp"
-#include "common_files/command.hpp"
+// -I"./" -I"./common_files/"
+#include <utils.hpp>
+#include <command_set.hpp>
+#include <command.hpp>
 
 using namespace std;
 using namespace utils;

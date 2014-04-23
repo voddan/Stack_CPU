@@ -12,8 +12,8 @@
 
 #include <assert.h>
 
-#include "utils.hpp"
-#include "command.hpp"
+#include <utils.hpp>
+#include <command.hpp>
 
 using namespace std;
 using namespace utils;
