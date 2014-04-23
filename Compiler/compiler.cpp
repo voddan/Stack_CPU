@@ -10,17 +10,17 @@
 #include <string>
 #include <list>
 #include <iostream>
-#include <sstream>
 #include <fstream>
-#include <typeinfo>
 
-#include "../utils.hpp"
-#include "command.hpp"
+#include "common_files/utils.hpp"
+#include "common_files/command_set.hpp"
+#include "common_files/command.hpp"
 
 using namespace std;
 using namespace utils;
 
 using namespace command;
+using namespace command_set;
 //----------------------------------------------------------------------
 
 int main() {

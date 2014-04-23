@@ -7,13 +7,11 @@
  
 #include <string>
 #include <list>
-#include <iostream>
 #include <sstream>
-#include <typeinfo>
 
 #include <assert.h>
 
-#include "../utils.hpp"
+#include "utils.hpp"
 
 using namespace std;
 using namespace utils;
@@ -92,7 +90,10 @@ class Command : public Printable{
 			assert(0 <= r3.val && r3.val < REG_SIZE); 
 			arr |= (r3.val << (0));
 			
-			return arr;
+			// swaps for big-small endian
+			wchar_t result = ((arr << 8) & 0xff00) | ((arr >> 8) & 0x00ff);
+			
+			return result;
 		}
 
 	private:
@@ -155,16 +156,9 @@ class Com_Arg : public Command{
 		
 		virtual void compile(ostream& stream) {
 			wchar_t head = head_compil(true, code(), reg(), Reg(0), Reg(0));
+			stream.write((char*) &head, 2);
 			
-			char* arr = (char*) &head;
-			stream.write(arr + 1, 1);
-			stream.write(arr + 0 , 1);
-			
-			arr = (char*) &_arg;
-			stream.write(arr + 3, 1);
-			stream.write(arr + 2 , 1);
-			stream.write(arr + 1 , 1);
-			stream.write(arr + 0 , 1);
+			stream.write((char*) &_arg, 4);
 		}
 
 	private:
@@ -195,9 +189,7 @@ class Com_Non : public Command{
 		
 		virtual void compile(ostream& stream) {
 			wchar_t head = head_compil(false, code(), reg(), reg_1(), reg_2());
-			char* arr = (char*) &head;
-			stream.write(arr + 1, 1);
-			stream.write(arr + 0, 1);
+			stream.write((char*) &head, 2);
 		}
 
 	private:
@@ -205,46 +197,6 @@ class Com_Non : public Command{
 		const Reg _reg_1;
 		const Reg _reg_2;
 };	
-
-}
-////////////////////////////////////////////////////////////////////////
-
-namespace command { // Commands with NO arguments
-	
-class ADD : public Com_Non{
-	public:
-		ADD(Reg reg, Reg reg_1, Reg reg_2) : Com_Non("add", 1, reg, reg_1, reg_2) {}
-		virtual ~ADD() {}
-		
-		void execute() {
-			*reg().reg() = *reg_1().reg() + *reg_2().reg();
-		}
-};		
-
-class MOV : public Com_Non{
-	public:
-		MOV(Reg reg, Reg reg_1) : Com_Non("mov", 2, reg, reg_1, Reg(0)) {}
-		virtual ~MOV() {}
-		
-		void execute() {
-			*reg().reg() = *reg_1().reg();
-		}
-};		
-
-}
-////////////////////////////////////////////////////////////////////////
-
-namespace command { // Commands with ARGuments
-	
-class SET : public Com_Arg{
-	public:
-		SET(Reg reg, int arg) : Com_Arg("set", 3, reg, arg) {}
-		virtual ~SET() {}
-		
-		void execute() {
-			*reg().reg() = arg();
-		}
-};		
 
 }
 ////////////////////////////////////////////////////////////////////////
