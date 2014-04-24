@@ -1,6 +1,6 @@
-/* interpreter.cpp
+/* test.cpp
  * 
- * The interpreter of byte-code from the compiler
+ * Tests for interpreter.cpp
  * 
  * */
  
@@ -13,30 +13,43 @@
 #include <command_set.hpp>
 #include <command.hpp>
 
+#include <stack_cpu.hpp>
+
 using namespace std;
 using namespace utils;
 
 using namespace command;
 using namespace command_set;
 
-
-//----------------------------------------------------------------------
-#include <stack_cpu.hpp>
-
 using namespace stack_cpu;
+//----------------------------------------------------------------------
+void print_test_name(string name){
+	cout << std::endl;
+	cout << "#!---------------\n";
+	cout << "#!--" << name << "--\n";
+	cout << std::endl;
+}
+
+void test_load_instruct();
 
 int main() {
-	Stack_CPU::add_commands_arg(SET::execute_indexed());
-	Stack_CPU::add_commands_non(ADD::execute_indexed());
-	Stack_CPU::add_commands_non(MOV::execute_indexed());
-	 
+	
+	test_load_instruct();
+	
+	return 0;
+}
+
+void test_load_instruct() {
+	print_test_name("test_load_instruct");
+	using namespace stack_cpu;
+	
 	ifstream input("a.out");
 	
 	Stack_CPU cpu;
 	
 	cpu.load_instruct(input);
 	cpu.dump_instruct(cout);
-	
-	
-	return 0;
 }
+
+
+

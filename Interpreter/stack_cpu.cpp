@@ -44,25 +44,8 @@ Instruct::Instruct(wchar_t arr) {
 	
 } // */
 
-
-/*
-Instruct::Instruct(bool has_arg, Code code, Reg r1, Reg r2, Reg r3) { 
-	_has_arg = has_arg;
-	_code    = code.val;
-	_r1      = r1.val;
-	_r2      = r2.val;
-	_r3      = r3.val;
-} // */
-	
-//~ Instruct() : _has_arg(false), _code(0), _r1(0), _r2(0), _r3(0) {}
-//~ Instruct(const Instruct& instr) 
-	//~ : _has_arg(instr._has_arg), _code(instr._code.val), 
-	//~ _r1(instr._r1.val), _r2(instr._r2.val), _r3(instr._r3.val) {}
-	
-//Instruct(wchar_t arr);
 }
 ////////////////////////////////////////////////////////////////////////
-
 
 namespace stack_cpu { // head_unpack
 	
@@ -97,6 +80,9 @@ Instruct head_unpack(wchar_t arr) {
 ////////////////////////////////////////////////////////////////////////	
 	
 namespace stack_cpu { // Stack_CPU::
+	
+Com_Arg::execute_func_t Stack_CPU::commands_arg[CODE_SIZE] = {};
+Com_Non::execute_func_t Stack_CPU::commands_non[CODE_SIZE] = {};
 		
 void Stack_CPU::dump_instruct(ostream& stream) {
 	const char names[16] = {
@@ -125,7 +111,7 @@ bool Stack_CPU::load_instruct(ifstream& stream) {
 	return true;
 }
 
-void Stack_CPU::run_instruct() {
+void Stack_CPU::run_one_instruct() {
 	vector<char>::const_iterator iter = instruct.begin();
 	
 	wchar_t com;
@@ -156,6 +142,14 @@ void Stack_CPU::run_instruct() {
 	
 }
 	
+void Stack_CPU::add_commands_arg(pair<Code, Com_Arg::execute_func_t> p) {
+	Stack_CPU::commands_arg[p.first.val] = p.second;
+}
+
+void Stack_CPU::add_commands_non(pair<Code, Com_Non::execute_func_t> p) {
+	Stack_CPU::commands_non[p.first.val] = p.second;
+}
+
 }
 //////////////////////////////////////////////////////////////////////// 
 
