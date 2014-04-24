@@ -9,7 +9,6 @@
 #include <iostream>
 #include <fstream>
 
-// -I"./" -I"./common_files/"
 #include <utils.hpp>
 #include <command_set.hpp>
 #include <command.hpp>

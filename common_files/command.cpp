@@ -14,19 +14,20 @@
 
 #include <utils.hpp>
 #include <consts.hpp>
+#include <command.hpp>
 
 using namespace std;
 using namespace utils;
 
 namespace command { // Code; Reg
 	
-virtual string Code::to_string() const { 
+string Code::to_string() const { 
 	ostringstream str;
 	str << std::hex << val;
 	return str.str();
 }
 
-virtual string Reg::to_string() const { 
+string Reg::to_string() const { 
 	ostringstream str;
 	str << "(" << names[val] << ")";
 	return str.str();
@@ -43,7 +44,7 @@ const string Reg::names[] = {
 namespace command { // Command; Command_list
 	
 		//TODO: use bytes()
-static wchar_t Command::head_pack(bool has_arg, Code code, Reg r1, Reg r2, Reg r3) {
+wchar_t Command::head_pack(bool has_arg, Code code, Reg r1, Reg r2, Reg r3) {
 	wchar_t arr = 0;
 	assert(CODE_SIZE == 64);
 	assert(REG_SIZE == 8);
@@ -69,14 +70,14 @@ static wchar_t Command::head_pack(bool has_arg, Code code, Reg r1, Reg r2, Reg r
 }
 		
 
-~Command_list::Command_list() {
+Command_list::~Command_list() {
 	for(list<Command*>::iterator iter = begin();
 		iter != end(); iter++) {
 			delete *iter;
 		}
 }
 
-virtual string Command_list::to_string() const {
+string Command_list::to_string() const {
 	ostringstream stream;
 	stream << "Command_list[ \n";
 	for(Command_list::const_iterator iter = begin();
@@ -103,7 +104,7 @@ namespace command { // Com_Arg; Com_Non
 	
 // TODO: add adress modification
 		
-virtual string Com_Arg::to_string() const {
+string Com_Arg::to_string() const {
 	ostringstream str;
 	str << "Com_Arg(" << name() << ": "; 
 	str << _reg << " ~ "; 
@@ -115,7 +116,7 @@ virtual string Com_Arg::to_string() const {
 
 
 
-virtual void Com_Arg::compile(ostream& stream) {
+void Com_Arg::compile(ostream& stream) {
 	wchar_t head = head_pack(true, code(), reg(), Reg(0), Reg(0));
 	stream.write((char*) &head, 2);
 	
@@ -123,7 +124,7 @@ virtual void Com_Arg::compile(ostream& stream) {
 }
 
 		
-virtual string Com_Non::to_string() const {
+string Com_Non::to_string() const {
 	ostringstream str;
 	str << "Com_Non(" << name() << ": "; 
 	str << _reg   << " ~ "; 
@@ -134,7 +135,7 @@ virtual string Com_Non::to_string() const {
 
 //----------------
 
-virtual void Com_Non::compile(ostream& stream) {
+void Com_Non::compile(ostream& stream) {
 	wchar_t head = head_pack(false, code(), reg(), reg_1(), reg_2());
 	stream.write((char*) &head, 2);
 }
