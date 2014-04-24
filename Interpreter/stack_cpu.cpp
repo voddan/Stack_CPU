@@ -24,7 +24,7 @@
 using namespace std;
 using namespace command;
 
-namespace stack_cpu {
+namespace stack_cpu { // constructors for Instruct
 /*
 Instruct::Instruct(wchar_t arr) {
 	assert(CODE_SIZE == 64);
@@ -60,8 +60,12 @@ Instruct::Instruct(bool has_arg, Code code, Reg r1, Reg r2, Reg r3) {
 	//~ _r1(instr._r1.val), _r2(instr._r2.val), _r3(instr._r3.val) {}
 	
 //Instruct(wchar_t arr);
+}
+////////////////////////////////////////////////////////////////////////
 
 
+namespace stack_cpu { // head_unpack
+	
 Instruct head_unpack(wchar_t arr) {
 	assert(CODE_SIZE == 64);
 	assert(REG_SIZE  == 8);
@@ -88,8 +92,11 @@ Instruct head_unpack(wchar_t arr) {
 	
 	return Instruct(has_arg, code, r1, r2, r3);
 }
+
+}
+////////////////////////////////////////////////////////////////////////	
 	
-	
+namespace stack_cpu { // Stack_CPU::
 		
 void Stack_CPU::dump_instruct(ostream& stream) {
 	const char names[16] = {

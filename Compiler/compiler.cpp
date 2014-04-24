@@ -12,7 +12,6 @@
 #include <iostream>
 #include <fstream>
 
-// -I"./" -I"./common_files/"
 #include <utils.hpp>
 #include <command_set.hpp>
 #include <command.hpp>
@@ -26,16 +25,13 @@ using namespace command_set;
 
 int main() {
 	 
-	Command_list list;
-	list << new ADD(Reg(1), Reg(2), Reg(3));
-	list << new MOV(Reg(2), Reg(3));
-	list << new SET(Reg(1), (255));
-	list << new MOV(Reg(3), Reg(1));
-	 
-	cout << list;
+	Com_Arg com = SET(Reg(0), 239);
 	
-	ofstream output("a.out");
-	list.compile(output);
+	cout << com.code().val << endl;
+	
+	cout << SET::execute_indexed().first.val << endl;
+	cout << SET::execute_indexed().second << endl;
+	
 	
 	return 0;
 }

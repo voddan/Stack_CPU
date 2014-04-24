@@ -125,6 +125,10 @@ class Com_Non : public Command{
 		typedef void (*execute_func_t)(Reg, Reg, Reg);
 		static void execute(Reg reg, Reg reg_1, Reg reg_2);
 		
+		pair<Code, execute_func_t> execute_func_indexed() {
+			return pair<Code, execute_func_t> (code(), &execute);
+		}
+		
 		virtual void compile(ostream& stream);
 
 	private:
