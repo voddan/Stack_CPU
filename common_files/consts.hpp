@@ -16,7 +16,12 @@ namespace command {
 }
 ////////////////////////////////////////////////////////////////////////
 
-#define bytes(xx, y) (( (xx) << (sizeof(xx) * 8 - (y)) ) >> (sizeof(xx) * 8 - (y)) )
-
+//#define DEBUG
+#ifdef DEBUG
+	#define debug(obj) std::cout << obj << std::endl
+#else
+	#define  debug(obj)
+#endif
+////////////////////////////////////////////////////////////////////////
 
 #endif // _CONSTS_HPP_

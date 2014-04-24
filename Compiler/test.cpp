@@ -40,7 +40,6 @@ int main() {
 
 
 void test_Command() {
-	/*
 	print_test_name("test_Command");
 	using namespace command;
 	using namespace command_set;
@@ -53,13 +52,12 @@ void test_Command() {
 	
 	list<Command*> L2;
 	L2 << new SET(Reg(1), (255));
+	
 	cout << L2;
 	delete (L2.front());
-	// */
 }
 
 void test_Command_compile() {
-	/*
 	print_test_name("test_Command_compile: writing to test.out");
 	using namespace command;
 	using namespace command_set;
@@ -73,15 +71,9 @@ void test_Command_compile() {
 
 	ofstream output("test.out");
 	list.compile(output);
-	
-	//cout << std::;
-	//list.compile(cout);
-	// */
-	
 }
 
 void test_command_Reg_registers() {
-	//*
 	print_test_name("test_command_Reg_registers");
 	using namespace command;
 	using namespace command_set;
@@ -105,5 +97,4 @@ void test_command_Reg_registers() {
 	func2(Reg(0), 239);
 	
 	Reg::dump_registers_val(cout); 
-	// */
 }

@@ -9,6 +9,7 @@
  
 #include <string>
 #include <sstream>
+#include <iostream>
 
 #include <assert.h>
 
@@ -32,7 +33,7 @@ class ADD : public Com_Non{
 		
 		// how to inherit it?
 		static pair<Code, execute_func_t> execute_indexed() {
-			return pair<Code, execute_func_t> (Code(_code), &execute);
+			return pair<Code, execute_func_t> (Code(_code), ADD::execute);
 		}
 		
 	private:
@@ -50,7 +51,7 @@ class MOV : public Com_Non{
 		
 		// how to inherit it?
 		static pair<Code, execute_func_t> execute_indexed() {
-			return pair<Code, execute_func_t> (Code(_code), &execute);
+			return pair<Code, execute_func_t> (Code(_code), MOV::execute);
 		}
 		
 	private:
@@ -68,12 +69,15 @@ class SET : public Com_Arg{
 		virtual ~SET() {}
 		
 		static void execute(Reg reg, int arg) {
+			debug( "#! SET::execute " );
+			debug( "#!" << reg << " | " << reg.reg() );
+			debug( "#!" << hex << arg );
 			*reg.reg() = arg;
 		}
 		
 		// how to inherit it?
 		static pair<Code, execute_func_t> execute_indexed() {
-			return pair<Code, execute_func_t> (Code(_code), execute);
+			return pair<Code, execute_func_t> (Code(_code), SET::execute);
 		}
 		
 	private:

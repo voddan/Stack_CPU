@@ -35,7 +35,7 @@ string Reg::to_string() const {
 	
 
 const string Reg::_names[] = {
-	"--", "aa", "bb", "cc", "dd", "xx", "yy", "zz"
+	"aa", "bb", "cc", "dd", "ee", "xx", "yy", "zz"
 };
 
 int* Reg::_registers[] = {};

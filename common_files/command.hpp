@@ -100,7 +100,7 @@ class Com_Arg : public Command{
 		//----------------
 		
 		typedef void (*execute_func_t)(Reg, int);
-		static void execute(Reg reg, int arg);
+		//static void execute(Reg reg, int arg);
 		
 		virtual void compile(ostream& stream);
 
@@ -123,11 +123,11 @@ class Com_Non : public Command{
 		//----------------
 		
 		typedef void (*execute_func_t)(Reg, Reg, Reg);
-		static void execute(Reg reg, Reg reg_1, Reg reg_2);
+		//static void execute(Reg reg, Reg reg_1, Reg reg_2);
 		
-		pair<Code, execute_func_t> execute_func_indexed() {
-			return pair<Code, execute_func_t> (code(), &execute);
-		}
+		//~ pair<Code, execute_func_t> execute_func_indexed() {
+			//~ return pair<Code, execute_func_t> (code(), &execute);
+		//~ }
 		
 		virtual void compile(ostream& stream);
 
