@@ -12,15 +12,15 @@
 #include <assert.h>
 
 #include <utils.hpp>
+#include <consts.hpp>
 
 using namespace std;
 using namespace utils;
 
 namespace command { // Code; Reg
 	
-#define CODE_SIZE 64
 struct Code : Printable{
-	Code(int x) : val((assert(0 <= x && x < CODE_SIZE), x)) {}
+	explicit Code(int x) : val((assert(0 <= x && x < CODE_SIZE), x)) {}
 	const int val;
 	virtual string to_string() const { 
 		ostringstream str;
@@ -29,9 +29,8 @@ struct Code : Printable{
 	}
 };
 
-#define REG_SIZE 8
 struct Reg : Printable{ // POD
-	Reg(int x) : val((assert(0 <= x && x < REG_SIZE), x)) {}
+	explicit Reg(int x) : val((assert(0 <= x && x < REG_SIZE), x)) {}
 	//virtual ~Reg() {}
 	const int val;
 	
@@ -55,8 +54,6 @@ const string Reg::names[] = {
 
 namespace command { // Command; Command_list
 	
-#define bytes(xx, y) (( (xx) << (sizeof(xx) * 8 - (y)) ) >> (sizeof(xx) * 8 - (y)) )
-	
 class Command : public Printable{
 	public:
 		Command(string name, int code) 
@@ -64,14 +61,14 @@ class Command : public Printable{
 		virtual ~Command() {}
 		
 		string 	name() const {return _name;}
-		int 	code() const {return _code.val;}
+		Code 	code() const {return _code;}
 		
 		virtual string to_string() const {return "Command(" + _name + ")";}
 		//----------------
 		
 		virtual void compile(ostream&) = 0;
 		//TODO: use bytes()
-		static wchar_t head_compil(bool has_arg, Code code, Reg r1, Reg r2, Reg r3) {
+		static wchar_t head_pack(bool has_arg, Code code, Reg r1, Reg r2, Reg r3) {
 			wchar_t arr = 0;
 			assert(CODE_SIZE == 64);
 			assert(REG_SIZE == 8);
@@ -95,7 +92,7 @@ class Command : public Printable{
 			
 			return result;
 		}
-
+		
 	private:
 		const string _name;
 		const Code _code;
@@ -134,6 +131,8 @@ class Command_list : public list <Command*>, public Printable {
 
 namespace command { // Com_Arg; Com_Non
 	
+//typedef void (*Execute_func) ();
+	
 // TODO: add adress modification
 class Com_Arg : public Command{
 	public:
@@ -154,8 +153,10 @@ class Com_Arg : public Command{
 		
 		//----------------
 		
+		
+		
 		virtual void compile(ostream& stream) {
-			wchar_t head = head_compil(true, code(), reg(), Reg(0), Reg(0));
+			wchar_t head = head_pack(true, code(), reg(), Reg(0), Reg(0));
 			stream.write((char*) &head, 2);
 			
 			stream.write((char*) &_arg, 4);
@@ -188,7 +189,7 @@ class Com_Non : public Command{
 		//----------------
 		
 		virtual void compile(ostream& stream) {
-			wchar_t head = head_compil(false, code(), reg(), reg_1(), reg_2());
+			wchar_t head = head_pack(false, code(), reg(), reg_1(), reg_2());
 			stream.write((char*) &head, 2);
 		}
 
