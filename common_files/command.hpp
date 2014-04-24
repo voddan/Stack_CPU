@@ -27,14 +27,20 @@ struct Code : Printable{
 
 struct Reg : Printable{ // POD
 	explicit Reg(int x) : val((assert(0 <= x && x < REG_SIZE), x)) {}
-	//virtual ~Reg() {}
 	const int val;
 	
-	int* reg() {return 0;}
+	int* reg() {return _registers[val];}
 	virtual string to_string() const;
 	
+	static void dump_registers(ostream& stream);
+	static void dump_registers_val(ostream& stream);
+	//---------------------------
+	
+	static void load_registers(int arr[REG_SIZE]);
+	
 	private:
-		static const string names[REG_SIZE];
+		static const string _names[REG_SIZE];
+		static int* _registers[REG_SIZE];
 };
 
 }
@@ -91,10 +97,10 @@ class Com_Arg : public Command{
 		int 	arg() const {return _arg;}
 		
 		virtual string to_string() const;
-		
 		//----------------
 		
-		
+		typedef void (*execute_func_t)(Reg, int);
+		static void execute(Reg reg, int arg);
 		
 		virtual void compile(ostream& stream);
 
@@ -109,13 +115,15 @@ class Com_Non : public Command{
 			_reg(reg), _reg_1(reg_1), _reg_2(reg_2)  {}
 		virtual ~Com_Non() {}
 		
-		Reg 	reg  () const {return _reg;}
-		Reg 	reg_1() const {return _reg_1;}
-		Reg 	reg_2() const {return _reg_2;}
+		Reg reg  () const {return _reg;}
+		Reg reg_1() const {return _reg_1;}
+		Reg reg_2() const {return _reg_2;}
 		
 		virtual string to_string() const;
-		
 		//----------------
+		
+		typedef void (*execute_func_t)(Reg, Reg, Reg);
+		static void execute(Reg reg, Reg reg_1, Reg reg_2);
 		
 		virtual void compile(ostream& stream);
 

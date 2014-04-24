@@ -29,14 +29,37 @@ string Code::to_string() const {
 
 string Reg::to_string() const { 
 	ostringstream str;
-	str << "(" << names[val] << ")";
+	str << "(" << _names[val] << ")";
 	return str.str();
 }
 	
 
-const string Reg::names[] = {
+const string Reg::_names[] = {
 	"--", "aa", "bb", "cc", "dd", "xx", "yy", "zz"
 };
+
+int* Reg::_registers[] = {};
+
+void Reg::load_registers(int arr[REG_SIZE]) {
+	for(int i = 0; i < REG_SIZE; i++) {
+		  Reg::_registers[i] = (arr + i);
+		*(Reg::_registers[i]) = 0;
+	}
+}
+
+void Reg::dump_registers_val(ostream& stream) {
+	stream << "#! dump of Reg::registers (values)" << endl;
+	for(int i = 0; i < REG_SIZE; i++) {
+		stream << "#! " << *(Reg::_registers[i]) << endl;
+	}
+}
+
+void Reg::dump_registers(ostream& stream) {
+	stream << "#! dump of Reg::registers (pointers)" << endl;
+	for(int i = 0; i < REG_SIZE; i++) {
+		stream << "#! " << Reg::_registers[i] << endl;
+	}
+}
 
 }
 ////////////////////////////////////////////////////////////////////////
