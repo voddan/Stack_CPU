@@ -12,11 +12,16 @@
 #include <utils.hpp>
 #include <consts.hpp>
 #include <command.hpp>
+//#include <linker.hpp>
 
 using namespace std;
 using namespace utils;
 
 namespace command { // Code; Reg
+	
+//~ int* Reg::reg() {
+	//~ return linker::Linker::_registers[val];
+//~ }
 	
 string Code::to_string() const { 
 	ostringstream str;
@@ -34,31 +39,31 @@ string Reg::to_string() const {
 const string Reg::_names[] = {
 	"aa", "bb", "cc", "dd", "ee", "xx", "yy", "zz"
 };
-
-int* Reg::_registers[] = {};
-
-void Reg::load_registers(int arr[REG_SIZE]) {
-	for(int i = 0; i < REG_SIZE; i++) {
-		  Reg::_registers[i] = (arr + i);
-		*(Reg::_registers[i]) = 0;
-	}
 }
+//int* Reg::_registers[] = {};
 
-void Reg::dump_registers_val(ostream& stream) {
-	stream << "#! dump of Reg::registers (values)" << endl;
-	for(int i = 0; i < REG_SIZE; i++) {
-		stream << "#! " << *(Reg::_registers[i]) << endl;
-	}
-}
+//~ void Reg::load_registers(int arr[REG_SIZE]) {
+	//~ for(int i = 0; i < REG_SIZE; i++) {
+		  //~ Reg::_registers[i] = (arr + i);
+		//~ *(Reg::_registers[i]) = 0;
+	//~ }
+//~ }
 
-void Reg::dump_registers(ostream& stream) {
-	stream << "#! dump of Reg::registers (pointers)" << endl;
-	for(int i = 0; i < REG_SIZE; i++) {
-		stream << "#! " << Reg::_registers[i] << endl;
-	}
-}
-
-}
+//~ void Reg::dump_registers_val(ostream& stream) {
+	//~ stream << "#! dump of Reg::registers (values)" << endl;
+	//~ for(int i = 0; i < REG_SIZE; i++) {
+		//~ stream << "#! " << *(Reg::_registers[i]) << endl;
+	//~ }
+//~ }
+//~ 
+//~ void Reg::dump_registers(ostream& stream) {
+	//~ stream << "#! dump of Reg::registers (pointers)" << endl;
+	//~ for(int i = 0; i < REG_SIZE; i++) {
+		//~ stream << "#! " << Reg::_registers[i] << endl;
+	//~ }
+//~ }
+//~ 
+//~ }
 ////////////////////////////////////////////////////////////////////////
 
 namespace command { // Command; Command_list

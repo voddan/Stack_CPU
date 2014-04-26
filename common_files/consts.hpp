@@ -20,7 +20,14 @@ namespace command {
 #ifdef DEBUG
 	#define debug(obj) std::cout << obj << std::endl
 #else
-	#define  debug(obj)
+	#define debug(obj)
+#endif
+
+
+#ifdef DEBUG
+	#define nondebug(mod) mod
+#else
+	#define nondebug(mod)
 #endif
 ////////////////////////////////////////////////////////////////////////
 

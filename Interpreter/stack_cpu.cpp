@@ -110,49 +110,82 @@ Instruct head_unpack(wchar_t arr) {
 	
 namespace stack_cpu { // Stack_CPU::
 	
-Com_Arg::execute_func_t Stack_CPU::commands_arg[CODE_SIZE] = {};
-Com_Non::execute_func_t Stack_CPU::commands_non[CODE_SIZE] = {};
+//~ Com_Arg::execute_func_t Stack_CPU::commands_arg[CODE_SIZE] = {};
+//~ Com_Non::execute_func_t Stack_CPU::commands_reg[CODE_SIZE] = {};
 		
-void Stack_CPU::dump_instructions(ostream& stream) {
-	const char names[16] = {
-		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		'a', 'b', 'c', 'd', 'e', 'f' 
-	};
-	long count = 0;
-	
-	for( vector<char>::const_iterator iter = instructions.begin();
-			iter != instructions.end(); iter++) {
-		stream << names[(*iter >> 4) & 0x0f];
-		stream << names[*iter & 0x0f];
-		stream << " ";
-		
-		count++;
-		if(count % 16 == 0) stream << "\n";
-	}
-}
+//~ void Stack_CPU::dump_instructions(ostream& stream) {
+	//~ const char names[16] = {
+		//~ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		//~ 'a', 'b', 'c', 'd', 'e', 'f' 
+	//~ };
+	//~ long count = 0;
+	//~ 
+	//~ for( vector<char>::const_iterator iter = instructions.begin();
+			//~ iter != instructions.end(); iter++) {
+		//~ stream << names[(*iter >> 4) & 0x0f];
+		//~ stream << names[*iter & 0x0f];
+		//~ stream << " ";
+		//~ 
+		//~ count++;
+		//~ if(count % 16 == 0) stream << "\n";
+	//~ }
+//~ }
 
-void Stack_CPU::dump_regs(ostream& stream) {
-	stream << "#! dump of Stack_CPU registers" << endl;
-	for(int i = 0; i < REG_SIZE; i++) {
-		Reg reg = Reg(i);
+// may be
+//~ void Stack_CPU::dump_regs(ostream& stream) {
+	//~ stream << "#! dump of Stack_CPU registers" << endl;
+	//~ for(int i = 0; i < REG_SIZE; i++) {
+		//~ Reg reg = Reg(i);
+		//~ 
+		//~ stream << "#! register" << reg << ": ";
+		//~ stream << regs[i];
+		//~ stream << endl;
+	//~ }
+//~ }
 		
-		stream << "#! register" << reg << ": ";
-		stream << regs[i];
-		stream << endl;
-	}
-}
-		
-bool Stack_CPU::load_instructions(ifstream& stream) {
-	char ch = 0;
-	
-	while( stream.read(&ch , 1) )
-		instructions.push_back(ch);
-		
-	return true;
-}
+//~ bool Stack_CPU::load_instructions(ifstream& stream) {
+	//~ char ch = 0;
+	//~ 
+	//~ while( stream.read(&ch , 1) )
+		//~ instructions.push_back(ch);
+		//~ 
+	//~ return true;
+//~ }
+
 
 void Stack_CPU::run_instructions() {
-	vector<char>::const_iterator iter = instructions.begin();
+	Linker::reset_ip_register();
+	
+	while( Linker::has_instruction() ) {
+		wchar_t head = Linker::read_head();
+		
+		debug( "#! run_instructions" );
+		debug( hex << head << dec );
+		
+		// unnecessary packing-unpacking into Instruct
+		Instruct instruct = head_unpack(head);
+		
+		bool has_arg = instruct.has_arg();
+		Code    code = instruct.code();
+		Reg       r1 = instruct.r1();
+		Reg       r2 = instruct.r2();
+		Reg       r3 = instruct.r3();
+		
+		if( !has_arg ) {
+			debug( "#! no arguments\n" );
+			Linker::run_command_reg(code, r1, r2, r3);
+		} else {
+			debug( "#! has an argument\n" );
+			int arg = Linker::read_arg();
+			Linker::run_command_arg(code, r1, arg);
+		}
+	}
+	
+}
+
+/*
+void Stack_CPU::run_instructions() {
+	//vector<char>::const_iterator iter = Linker::instructions.begin();
 	
 	while( iter != instructions.end() ) {
 		wchar_t com;
@@ -168,7 +201,7 @@ void Stack_CPU::run_instructions() {
 		debug( com );
 		
 		Instruct instruct = head_unpack(com);
-		//*
+	
 		bool has_arg = instruct.has_arg();
 		Code    code = instruct.code();
 		Reg       r1 = instruct.r1();
@@ -177,7 +210,7 @@ void Stack_CPU::run_instructions() {
 		
 		if( !has_arg ) {
 			debug( "#! no arguments\n" );
-			Stack_CPU::commands_non[code.val](r1, r2, r3);
+			Stack_CPU::commands_reg[code.val](r1, r2, r3);
 		} else {
 			debug( "#! has an argument\n" );
 			int arg;
@@ -193,33 +226,33 @@ void Stack_CPU::run_instructions() {
 		}
 	}
 	
-}
+}*/
 	
-void Stack_CPU::add_commands_arg(pair<Code, Com_Arg::execute_func_t> p) {
-	Stack_CPU::commands_arg[p.first.val] = p.second;
-}
+//~ void Stack_CPU::add_commands_arg(pair<Code, Com_Arg::execute_func_t> p) {
+	//~ Stack_CPU::commands_arg[p.first.val] = p.second;
+//~ }
+//~ 
+//~ void Stack_CPU::add_commands_reg(pair<Code, Com_Non::execute_func_t> p) {
+	//~ Stack_CPU::commands_reg[p.first.val] = p.second;
+//~ }
 
-void Stack_CPU::add_commands_non(pair<Code, Com_Non::execute_func_t> p) {
-	Stack_CPU::commands_non[p.first.val] = p.second;
-}
-
-void Stack_CPU::dump_commands_arg(ostream& stream) {
-	stream << "#! dump of Stack_CPU.commands_arg\n";
-	assert(stream == cout);
-	for (int i = 0; i < CODE_SIZE; i++) {
-		stream << "#! [" << setw(3) << i << "] ";
-		printf("%p\n", commands_arg[i]);
-	}
-}
-
-void Stack_CPU::dump_commands_non(ostream& stream) {
-	stream << "#! dump of Stack_CPU.commands_non\n";
-	assert(stream == cout);
-	for (int i = 0; i < CODE_SIZE; i++) {
-		stream << "#! [" << setw(3) << i << "] ";
-		printf("%p\n", commands_non[i]);
-	}
-}
+//~ void Stack_CPU::dump_commands_arg(ostream& stream) {
+	//~ stream << "#! dump of Stack_CPU.commands_arg\n";
+	//~ assert(stream == cout);
+	//~ for (int i = 0; i < CODE_SIZE; i++) {
+		//~ stream << "#! [" << setw(3) << i << "] ";
+		//~ printf("%p\n", commands_arg[i]);
+	//~ }
+//~ }
+//~ 
+//~ void Stack_CPU::dump_commands_reg(ostream& stream) {
+	//~ stream << "#! dump of Stack_CPU.commands_reg\n";
+	//~ assert(stream == cout);
+	//~ for (int i = 0; i < CODE_SIZE; i++) {
+		//~ stream << "#! [" << setw(3) << i << "] ";
+		//~ printf("%p\n", commands_reg[i]);
+	//~ }
+//~ }
 
 }
 //////////////////////////////////////////////////////////////////////// 

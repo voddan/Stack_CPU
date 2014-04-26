@@ -77,24 +77,25 @@ void test_command_Reg_registers() {
 	print_test_name("test_command_Reg_registers");
 	using namespace command;
 	using namespace command_set;
+	using namespace linker;
 
 	int regs[8] = {};
-	Reg::load_registers(regs);
+	Linker::load_registers(regs);
 	 
-	*Reg(0).reg() =  45;
-	*Reg(2).reg() =  3;
-	*Reg(1).reg() =  89;
+	*Linker::set_reg(Reg(0)) =  45;
+	*Linker::set_reg(Reg(2)) =  3;
+	*Linker::set_reg(Reg(1)) =  89;
 	
-	Reg::dump_registers_val(cout);
-	Reg::dump_registers(cout);
+	Linker::dump_registers_val(cout);
+	Linker::dump_registers(cout);
 	
 	Com_Non::execute_func_t func1 = ADD::execute;
 	func1(Reg(0), Reg(1), Reg(2));
 	
-	Reg::dump_registers_val(cout);
+	Linker::dump_registers_val(cout);
 	
 	Com_Arg::execute_func_t func2 = SET::execute;
 	func2(Reg(0), 239);
 	
-	Reg::dump_registers_val(cout); 
+	Linker::dump_registers_val(cout); 
 }

@@ -26,30 +26,33 @@ using namespace command_set;
 using namespace stack_cpu;
 
 int main() {
+	Stack_CPU cpu; 			// main subject of data
+	//-------------------------
+	Linker::load_ip_register(&cpu.ip_reg);
 	
-	Stack_CPU::add_commands_arg(SET::execute_indexed());
-	Stack_CPU::add_commands_non(ADD::execute_indexed());
-	Stack_CPU::add_commands_non(MOV::execute_indexed());
+	Linker::add_commands_arg(SET::execute_indexed());
+	Linker::add_commands_reg(ADD::execute_indexed());
+	Linker::add_commands_reg(MOV::execute_indexed());
+	
+	Linker::load_registers(cpu.regs);
 	 
 	ifstream input("a.out");
+	Linker::load_instructions(input);
 	
-	Stack_CPU cpu;
-	
-	cpu.load_instructions(input);
-	
-	cpu.dump_instructions(cout);
+	//-------------------------
+	Linker::dump_instructions(cout);
 	cout << endl;
 	
-	cpu.dump_regs(cout);
+	Linker::dump_registers_val(cout);
 	cout << endl;
-	
+	//-------------------------
 	//cpu.dump_commands_arg(cout);
-	//cpu.dump_commands_non(cout);
+	//cpu.dump_commands_reg(cout);
 	//cout << endl;
 	
 	cpu.run_instructions();
 	
-	cpu.dump_regs(cout);
+	Linker::dump_registers_val(cout);
 	cout << endl;
 	
 	return 0;

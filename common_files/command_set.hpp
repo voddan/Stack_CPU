@@ -15,19 +15,22 @@
 
 #include <utils.hpp>
 #include <command.hpp>
+#include <linker.hpp>
 
 using namespace std;
 using namespace utils;
 using namespace command;
+using namespace linker;
 
-namespace command_set { // Commands with NO arguments
+namespace command_set { // Commands for REGisters
 	
 struct ADD : public Com_Non{
 	ADD(Reg reg, Reg reg_1, Reg reg_2) : Com_Non("add", _code, reg, reg_1, reg_2) {}
 	virtual ~ADD() {}
 	
 	static void execute(Reg reg, Reg reg_1, Reg reg_2) {
-		*reg.reg() = *reg_1.reg() + *reg_2.reg();
+		//*reg.reg() = *reg_1.reg() + *reg_2.reg();
+		*(Linker::set_reg(reg)) = Linker::get_reg(reg_1) + Linker::get_reg(reg_2);
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
@@ -42,7 +45,8 @@ struct MOV : public Com_Non{
 	virtual ~MOV() {}
 	
 	static void execute(Reg reg, Reg reg_1, Reg reg_2) {
-		*reg.reg() = *reg_1.reg();
+		//*reg.reg() = *reg_1.reg();
+		*(Linker::set_reg(reg)) = Linker::get_reg(reg_1);
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
@@ -63,9 +67,10 @@ struct SET : public Com_Arg{
 	
 	static void execute(Reg reg, int arg) {
 		debug( "#! SET::execute " );
-		debug( "#!" << reg << " | " << reg.reg() );
-		debug( "#!" << hex << arg );
-		*reg.reg() = arg;
+		debug( "#!" << reg << " | " << Linker::get_reg(reg) << " | " << Linker::set_reg(reg) );
+		debug( "#!" << hex << arg << dec);
+		//*reg.reg() = arg;
+		*(Linker::set_reg(reg)) = arg;
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
