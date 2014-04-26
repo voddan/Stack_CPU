@@ -33,21 +33,45 @@ int* Linker::set_reg(Reg reg) {
 	return Linker::_registers[reg.val];
 }
 
+//~ void Linker::reset_ip_register() {
+	//~ *Linker::ip_register = 0;
+//~ }
+
+void Linker::set_ip_register(unsigned pos) {
+	debug("set ip register" << pos << endl);
+	*(Linker::ip_register) = pos;
+}
+
+unsigned Linker::get_ip_register() {
+	debug("get ip register" << *(Linker::ip_register) << endl);
+	return *(Linker::ip_register);
+}
+
+void Linker::set_ret_register(unsigned pos) {
+	debug("set ret register" << pos << endl);
+	*(Linker::ret_register) = pos;
+}
+
+unsigned Linker::get_ret_register() {
+	debug("get ip register" << *(Linker::ret_register) << endl);
+	return *(Linker::ret_register);
+}
+//----------------------
+bool Linker::has_instruction() {
+	return instructions.size() > (*ip_register);
+}
+
+unsigned Linker::end_instruction() {
+	return instructions.size();
+}
+//---------------------------
 void Linker::run_command_arg(Code code, Reg reg, int arg) {
 	Linker::commands_arg[code.val](reg, arg);
 }
 void Linker::run_command_reg(Code code, Reg reg, Reg reg_1, Reg reg_2) {
 	Linker::commands_reg[code.val](reg, reg_1, reg_2);
 }
-
-void Linker::reset_ip_register() {
-	*Linker::ip_register = 0;
-}
-
-bool Linker::has_instruction() {
-	return instructions.size() > *ip_register;
-}
-
+//-------------------------------
 wchar_t Linker::read_head() {
 	wchar_t result  = 0;
 	
@@ -90,6 +114,10 @@ namespace linker { // loading
 	
 void Linker::load_ip_register(unsigned* reg) {
 	ip_register = reg;
+}
+
+void Linker::load_ret_register(unsigned* reg) {
+	ret_register = reg;
 }
 	
 void Linker::load_registers(int arr[REG_SIZE]) {

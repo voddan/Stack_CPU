@@ -29,13 +29,18 @@ struct Linker{
 	static int get_reg(Reg reg);
 	static int* set_reg(Reg reg);
 	
-	static void run_command_arg(Code code, Reg reg, int arg);
-	static void run_command_reg(Code code, Reg reg, Reg reg_1, Reg reg_2);
-	
-	static void reset_ip_register();
+	//static void reset_ip_register();
 	static bool has_instruction();
+	static unsigned end_instruction();
 	
 	static void set_ret_register(unsigned pos);
+	static unsigned get_ret_register();
+	
+	static void set_ip_register(unsigned pos);
+	static unsigned get_ip_register();
+	
+	static void run_command_arg(Code code, Reg reg, int arg);
+	static void run_command_reg(Code code, Reg reg, Reg reg_1, Reg reg_2);
 	
 	static wchar_t read_head();
 	static int read_arg();
@@ -53,6 +58,7 @@ struct Linker{
 	//---------------------------
 	
 	static void load_ip_register(unsigned* reg);
+	static void load_ret_register(unsigned* reg);
 	
 	static void load_registers(int arr[REG_SIZE]);
 	

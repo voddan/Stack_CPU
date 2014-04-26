@@ -41,6 +41,8 @@ int main() {
 	
 	list << new MOV(Reg(7), Reg(6));
 	
+	list << new RET();
+	
 	
 	/////////////
 	cout << list;

@@ -54,7 +54,8 @@ class Stack_CPU {
 		
 		void run_instructions();
 		
-	nondebug(private:)
+	// for simplicity
+	//private:
 		const stack<int> user_stack;
 		const stack<int> prog_stack;
 		

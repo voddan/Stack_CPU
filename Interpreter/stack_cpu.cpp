@@ -111,7 +111,9 @@ Instruct head_unpack(wchar_t arr) {
 namespace stack_cpu { // Stack_CPU::
 	
 void Stack_CPU::run_instructions() {
-	Linker::reset_ip_register();
+	//Linker::reset_ip_register();
+	Linker::set_ip_register(0);
+	Linker::set_ret_register(Linker::end_instruction());
 	
 	while( Linker::has_instruction() ) {
 		wchar_t head = Linker::read_head();

@@ -52,7 +52,24 @@ struct MOV : public Com_Non{
 	}
 	private: static const Code _code;
 };
-const Code MOV::_code(2);		
+const Code MOV::_code(2);	
+	
+struct RET : public Com_Non{
+	RET() : Com_Non("ret", _code, Reg(0), Reg(0), Reg(0)) {}
+	virtual ~RET() {}
+	
+	static void execute(Reg reg, Reg reg_1, Reg reg_2) {
+		debug("return\n");
+		Linker::set_ip_register( Linker::get_ret_register() );
+		// should be unsaving registers
+	}
+	
+	static pair<Code, execute_func_t> execute_indexed() {
+		return pair<Code, execute_func_t> (_code, RET::execute);
+	}
+	private: static const Code _code;
+};
+const Code RET::_code(63);		
 
 }
 ////////////////////////////////////////////////////////////////////////

@@ -23,8 +23,8 @@ namespace command {
 	#define debug(obj)
 #endif
 
-
-#ifdef DEBUG
+// inverted
+#ifndef DEBUG
 	#define nondebug(mod) mod
 #else
 	#define nondebug(mod)
