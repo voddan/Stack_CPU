@@ -3,9 +3,6 @@
  * Implementation for commamd.hpp
  * */
  
-#ifndef _COMMAND_CPP_
-#define _COMMAND_CPP_
- 
 #include <string>
 #include <list>
 #include <sstream>
@@ -165,6 +162,3 @@ void Com_Non::compile(ostream& stream) {
 
 }
 ////////////////////////////////////////////////////////////////////////
-
-#endif // _COMMAND_CPP_
-

@@ -61,7 +61,6 @@ class Command : public Printable{
 		//----------------
 		
 		virtual void compile(ostream&) = 0;
-		//TODO: use bytes()
 		static wchar_t head_pack(bool has_arg, Code code, Reg r1, Reg r2, Reg r3); 
 		
 	private:

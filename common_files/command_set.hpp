@@ -27,13 +27,24 @@ class ADD : public Com_Non{
 		ADD(Reg reg, Reg reg_1, Reg reg_2) : Com_Non("add", _code, reg, reg_1, reg_2) {}
 		virtual ~ADD() {}
 		
-		static void execute(Reg reg, Reg reg_1, Reg reg_2) {
+		//~ static void execute(Reg reg, Reg reg_1, Reg reg_2) {
+			//~ *reg.reg() = *reg_1.reg() + *reg_2.reg();
+		//~ }
+		static void execute_s(Reg reg, Reg reg_1, Reg reg_2) {
+			ADD obj(reg, reg_1, reg_2);
+			obj.execute(reg, reg_1, reg_2);
+		}
+		
+		void execute(Reg reg, Reg reg_1, Reg reg_2) {
 			*reg.reg() = *reg_1.reg() + *reg_2.reg();
 		}
 		
 		// how to inherit it?
+		//~ static pair<Code, execute_func_t> execute_indexed() {
+			//~ return pair<Code, execute_func_t> (Code(_code), ADD::execute);
+		//~ }
 		static pair<Code, execute_func_t> execute_indexed() {
-			return pair<Code, execute_func_t> (Code(_code), ADD::execute);
+			return pair<Code, execute_func_t> (Code(_code), ADD::execute_s);
 		}
 		
 	private:
