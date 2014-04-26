@@ -31,11 +31,11 @@ struct ADD : public Com_Non{
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
-		return pair<Code, execute_func_t> (Code(_code), ADD::execute);
+		return pair<Code, execute_func_t> (_code, ADD::execute);
 	}
-	private:
-		static const int _code = 1;
-};		
+	private: static const Code _code;
+};	
+const Code ADD::_code(1);	
 
 struct MOV : public Com_Non{
 	MOV(Reg reg, Reg reg_1) : Com_Non("mov", _code, reg, reg_1, Reg(0)) {}
@@ -46,11 +46,11 @@ struct MOV : public Com_Non{
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
-		return pair<Code, execute_func_t> (Code(_code), MOV::execute);
+		return pair<Code, execute_func_t> (_code, MOV::execute);
 	}
-	private:
-		static const int _code = 2;
-};		
+	private: static const Code _code;
+};
+const Code MOV::_code(2);		
 
 }
 ////////////////////////////////////////////////////////////////////////
@@ -69,11 +69,11 @@ struct SET : public Com_Arg{
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
-		return pair<Code, execute_func_t> (Code(_code), SET::execute);
+		return pair<Code, execute_func_t> (_code, SET::execute);
 	}
-	private:
-		static const int _code = 3;
-};		
+	private: static const Code _code;
+};
+const Code SET::_code(3);		
 
 }
 ////////////////////////////////////////////////////////////////////////

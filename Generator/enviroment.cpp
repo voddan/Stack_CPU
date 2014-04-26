@@ -6,6 +6,8 @@ class Obj {
 		static int state;
 		
 		void dump();
+		
+		static void execute();
 	private:
 		int value;
 };
@@ -35,4 +37,11 @@ void del_obj() {
 	delete obj;
 	Obj::state = -13;
 }
+
+extern "C"
+void Obj::execute() {
+	printf("execute\n");
+}
+
+
 

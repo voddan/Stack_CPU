@@ -49,8 +49,8 @@ struct Reg : Printable{ // POD
 namespace command { // Command; Command_list
 	
 struct Command : public Printable{
-	Command(string name, int code) 
-		: _name(name), _code(Code(code)) {}
+	Command(string name, Code code) 
+		: _name(name), _code(code) {}
 	virtual ~Command() {}
 	
 	string 	name() const {return _name;}
@@ -71,7 +71,6 @@ struct Command_list : public list <Command*>, public Printable {
 	~Command_list();
 	
 	virtual string to_string() const;
-
 	
 	void compile(ostream& stream);
 };
@@ -82,7 +81,7 @@ struct Command_list : public list <Command*>, public Printable {
 namespace command { // Com_Arg; Com_Non
 	
 struct Com_Arg : public Command{
-	Com_Arg(string name, int code, Reg reg, int arg)
+	Com_Arg(string name, Code code, Reg reg, int arg)
 		: Command(name, code), _reg(reg), _arg(arg) {}
 	virtual ~Com_Arg() {}
 	
@@ -102,7 +101,7 @@ struct Com_Arg : public Command{
 };
 
 struct Com_Non : public Command{
-	Com_Non(string name, int code, Reg reg, Reg reg_1, Reg reg_2) : Command(name, code), 
+	Com_Non(string name, Code code, Reg reg, Reg reg_1, Reg reg_2) : Command(name, code), 
 		_reg(reg), _reg_1(reg_1), _reg_2(reg_2)  {}
 	virtual ~Com_Non() {}
 	

@@ -8,6 +8,8 @@ extern del_obj
 extern obj;
 extern head;
 
+;extern Obj_execute;
+
 section .text
 main:
 	; sys_write(stdout, message, length)
