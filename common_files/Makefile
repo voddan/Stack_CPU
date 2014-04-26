@@ -2,9 +2,13 @@
 command.o: BUILD.H command.hpp command.cpp
 	g++ -Wall -I"./" -c "command.cpp"
 	
-## command.o lib ##
+## utils.o lib ##
 utils.o: BUILD.H utils.hpp utils.cpp
 	g++ -Wall -I"./" -c "utils.cpp"
+
+## linker.o lib ##
+linker.o: BUILD.H linker.hpp linker.cpp
+	g++ -Wall -I"./" -c "linker.cpp"
 
 clean:
 	rm $(find . -type f -perm /+u+x) &
