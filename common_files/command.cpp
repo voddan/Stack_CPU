@@ -63,7 +63,6 @@ void Reg::dump_registers(ostream& stream) {
 
 namespace command { // Command; Command_list
 	
-		//TODO: use bytes()
 wchar_t Command::head_pack(bool has_arg, Code code, Reg r1, Reg r2, Reg r3) {
 	wchar_t arr = 0;
 	assert(CODE_SIZE == 64);
@@ -120,10 +119,6 @@ void Command_list::compile(ostream& stream) {
 
 namespace command { // Com_Arg; Com_Non
 	
-//typedef void (*Execute_func) ();
-	
-// TODO: add adress modification
-		
 string Com_Arg::to_string() const {
 	ostringstream str;
 	str << "Com_Arg(" << name() << ": "; 
