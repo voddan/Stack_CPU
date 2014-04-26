@@ -26,9 +26,9 @@ namespace command_set { // Commands for REGisters
 	
 struct ADD : public Com_Non{
 	ADD(Reg reg, Reg reg_1, Reg reg_2) : Com_Non("add", _code, reg, reg_1, reg_2) {}
-	virtual ~ADD() {}
 	
 	static void execute(Reg reg, Reg reg_1, Reg reg_2) {
+		debug("#! ADD::execute");
 		*(Linker::set_reg(reg)) = Linker::get_reg(reg_1) + Linker::get_reg(reg_2);
 	}
 	
@@ -41,9 +41,9 @@ const Code ADD::_code(1);
 
 struct MOV : public Com_Non{
 	MOV(Reg reg, Reg reg_1) : Com_Non("mov", _code, reg, reg_1, Reg(0)) {}
-	virtual ~MOV() {}
 	
 	static void execute(Reg reg, Reg reg_1, Reg reg_2) {
+		debug("#! MOV::execute");
 		*(Linker::set_reg(reg)) = Linker::get_reg(reg_1);
 	}
 	
@@ -56,12 +56,12 @@ const Code MOV::_code(2);
 	
 struct RET : public Com_Non{
 	RET() : Com_Non("ret", _code, Reg(0), Reg(0), Reg(0)) {}
-	virtual ~RET() {}
 	
 	static void execute(Reg reg, Reg reg_1, Reg reg_2) {
-		debug("return\n");
+		debug("#! RET::execute");
+		debug("return");
 		Linker::set_ip_register( Linker::get_ret_register() );
-		// should be unsaving registers
+		// should be unsaving of registers
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
@@ -78,7 +78,6 @@ namespace command_set { // Commands with ARGuments
 	
 struct SET : public Com_Arg{
 	SET(Reg reg, int arg) : Com_Arg("set", _code, reg, arg) {}
-	virtual ~SET() {}
 	
 	static void execute(Reg reg, int arg) {
 		debug( "#! SET::execute " );

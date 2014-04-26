@@ -15,8 +15,10 @@ namespace command {
 #define REG_SIZE 8
 }
 ////////////////////////////////////////////////////////////////////////
-
+//--------------
 //#define DEBUG
+//#define NDEBUG
+//--------------
 #ifdef DEBUG
 	#define debug(obj) std::cout << obj << std::endl
 #else

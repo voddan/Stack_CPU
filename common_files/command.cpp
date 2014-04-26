@@ -83,10 +83,10 @@ string Command_list::to_string() const {
 	return stream.str();
 }
 
-void Command_list::compile(ostream& stream) {
+void Command_list::to_bytecode(ostream& stream) {
 	for(Command_list::const_iterator iter = begin();
 		iter != end(); iter++){
-		(*iter)->compile(stream);
+		(*iter)->to_bytecode(stream);
 	}
 }
 
@@ -107,7 +107,7 @@ string Com_Arg::to_string() const {
 
 
 
-void Com_Arg::compile(ostream& stream) {
+void Com_Arg::to_bytecode(ostream& stream) {
 	wchar_t head = head_pack(true, code(), reg(), Reg(0), Reg(0));
 	stream.write((char*) &head, 2);
 	
@@ -126,7 +126,7 @@ string Com_Non::to_string() const {
 
 //----------------
 
-void Com_Non::compile(ostream& stream) {
+void Com_Non::to_bytecode(ostream& stream) {
 	wchar_t head = head_pack(false, code(), reg(), reg_1(), reg_2());
 	stream.write((char*) &head, 2);
 }

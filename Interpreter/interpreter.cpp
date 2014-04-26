@@ -48,8 +48,8 @@ int main() {
 	Linker::dump_registers_val(cout);
 	cout << endl;
 	//-------------------------
-	//cpu.dump_commands_arg(cout);
-	//cpu.dump_commands_reg(cout);
+	//Linker::dump_commands_arg(cout);
+	//Linker::dump_commands_reg(cout);
 	//cout << endl;
 	
 	cpu.run_instructions();

@@ -26,34 +26,36 @@ using namespace utils;
 namespace linker { // API
 	
 int Linker::get_reg(Reg reg) {
+	assert(Linker::_registers[reg.val]);
 	return *Linker::_registers[reg.val];
 }
 
 int* Linker::set_reg(Reg reg) {
+	assert(Linker::_registers[reg.val]);
 	return Linker::_registers[reg.val];
 }
 
-//~ void Linker::reset_ip_register() {
-	//~ *Linker::ip_register = 0;
-//~ }
-
 void Linker::set_ip_register(unsigned pos) {
 	debug("set ip register" << pos << endl);
+	assert(Linker::ip_register);
 	*(Linker::ip_register) = pos;
 }
 
 unsigned Linker::get_ip_register() {
 	debug("get ip register" << *(Linker::ip_register) << endl);
+	assert(Linker::ip_register);
 	return *(Linker::ip_register);
 }
 
 void Linker::set_ret_register(unsigned pos) {
 	debug("set ret register" << pos << endl);
+	assert(Linker::ret_register);
 	*(Linker::ret_register) = pos;
 }
 
 unsigned Linker::get_ret_register() {
 	debug("get ip register" << *(Linker::ret_register) << endl);
+	assert(Linker::ret_register);
 	return *(Linker::ret_register);
 }
 //----------------------
@@ -66,9 +68,11 @@ unsigned Linker::end_instruction() {
 }
 //---------------------------
 void Linker::run_command_arg(Code code, Reg reg, int arg) {
+	assert((Linker::commands_arg[code.val]) && "unsupported command");
 	Linker::commands_arg[code.val](reg, arg);
 }
 void Linker::run_command_reg(Code code, Reg reg, Reg reg_1, Reg reg_2) {
+	assert((Linker::commands_reg[code.val]) && "unsupported command");
 	Linker::commands_reg[code.val](reg, reg_1, reg_2);
 }
 //-------------------------------

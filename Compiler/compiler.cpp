@@ -48,7 +48,7 @@ int main() {
 	cout << list;
 
 	ofstream output("../Interpreter/a.out");
-	list.compile(output);
+	list.to_bytecode(output);
 	
 	return 0;
 }

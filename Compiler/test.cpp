@@ -70,7 +70,7 @@ void test_Command_compile() {
 	cout << list;
 
 	ofstream output("test.out");
-	list.compile(output);
+	list.to_bytecode(output);
 }
 
 void test_command_Reg_registers() {

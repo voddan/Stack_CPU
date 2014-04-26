@@ -51,7 +51,7 @@ struct Command : public Printable{
 	virtual string to_string() const {return "Command(" + _name + ")";}
 	//----------------
 	
-	virtual void compile(ostream&) = 0;
+	virtual void to_bytecode(ostream&) = 0;
 	static wchar_t head_pack(bool has_arg, Code code, Reg r1, Reg r2, Reg r3); 
 		
 	private:
@@ -64,7 +64,7 @@ struct Command_list : public list <Command*>, public Printable {
 	
 	virtual string to_string() const;
 	
-	void compile(ostream& stream);
+	void to_bytecode(ostream& stream);
 };
 
 }
@@ -85,7 +85,7 @@ struct Com_Arg : public Command{
 	
 	typedef void (*execute_func_t)(Reg, int);
 	
-	virtual void compile(ostream& stream);
+	virtual void to_bytecode(ostream& stream);
 
 	private:
 		const Reg _reg;
@@ -106,7 +106,7 @@ struct Com_Non : public Command{
 	
 	typedef void (*execute_func_t)(Reg, Reg, Reg);
 	
-	virtual void compile(ostream& stream);
+	virtual void to_bytecode(ostream& stream);
 
 	private:
 		const Reg _reg;
