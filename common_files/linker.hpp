@@ -42,7 +42,8 @@ struct Linker{
 	//---------------------------
 	static void dump_registers(ostream& stream);
 	static void dump_registers_val(ostream& stream);
-	// dump stacks
+	
+	// TODO: dump stacks
 	static void dump_commands_arg	(ostream& stream);
 	static void dump_commands_reg	(ostream& stream);
 	
@@ -61,8 +62,8 @@ struct Linker{
 	static bool load_instructions(ifstream& stream);
 	
 	//---------------------------
-	// operations with stacks
-	// operations special registers
+	// TODO: operations with stacks
+	// TODO: operations special registers
 	nondebug(private:)
 		static int* _registers[REG_SIZE];
 		

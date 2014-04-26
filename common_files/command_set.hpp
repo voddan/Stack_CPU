@@ -29,7 +29,6 @@ struct ADD : public Com_Non{
 	virtual ~ADD() {}
 	
 	static void execute(Reg reg, Reg reg_1, Reg reg_2) {
-		//*reg.reg() = *reg_1.reg() + *reg_2.reg();
 		*(Linker::set_reg(reg)) = Linker::get_reg(reg_1) + Linker::get_reg(reg_2);
 	}
 	
@@ -45,7 +44,6 @@ struct MOV : public Com_Non{
 	virtual ~MOV() {}
 	
 	static void execute(Reg reg, Reg reg_1, Reg reg_2) {
-		//*reg.reg() = *reg_1.reg();
 		*(Linker::set_reg(reg)) = Linker::get_reg(reg_1);
 	}
 	
@@ -69,7 +67,6 @@ struct SET : public Com_Arg{
 		debug( "#! SET::execute " );
 		debug( "#!" << reg << " | " << Linker::get_reg(reg) << " | " << Linker::set_reg(reg) );
 		debug( "#!" << hex << arg << dec);
-		//*reg.reg() = arg;
 		*(Linker::set_reg(reg)) = arg;
 	}
 	

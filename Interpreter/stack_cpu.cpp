@@ -110,49 +110,6 @@ Instruct head_unpack(wchar_t arr) {
 	
 namespace stack_cpu { // Stack_CPU::
 	
-//~ Com_Arg::execute_func_t Stack_CPU::commands_arg[CODE_SIZE] = {};
-//~ Com_Non::execute_func_t Stack_CPU::commands_reg[CODE_SIZE] = {};
-		
-//~ void Stack_CPU::dump_instructions(ostream& stream) {
-	//~ const char names[16] = {
-		//~ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		//~ 'a', 'b', 'c', 'd', 'e', 'f' 
-	//~ };
-	//~ long count = 0;
-	//~ 
-	//~ for( vector<char>::const_iterator iter = instructions.begin();
-			//~ iter != instructions.end(); iter++) {
-		//~ stream << names[(*iter >> 4) & 0x0f];
-		//~ stream << names[*iter & 0x0f];
-		//~ stream << " ";
-		//~ 
-		//~ count++;
-		//~ if(count % 16 == 0) stream << "\n";
-	//~ }
-//~ }
-
-// may be
-//~ void Stack_CPU::dump_regs(ostream& stream) {
-	//~ stream << "#! dump of Stack_CPU registers" << endl;
-	//~ for(int i = 0; i < REG_SIZE; i++) {
-		//~ Reg reg = Reg(i);
-		//~ 
-		//~ stream << "#! register" << reg << ": ";
-		//~ stream << regs[i];
-		//~ stream << endl;
-	//~ }
-//~ }
-		
-//~ bool Stack_CPU::load_instructions(ifstream& stream) {
-	//~ char ch = 0;
-	//~ 
-	//~ while( stream.read(&ch , 1) )
-		//~ instructions.push_back(ch);
-		//~ 
-	//~ return true;
-//~ }
-
-
 void Stack_CPU::run_instructions() {
 	Linker::reset_ip_register();
 	
@@ -182,77 +139,6 @@ void Stack_CPU::run_instructions() {
 	}
 	
 }
-
-/*
-void Stack_CPU::run_instructions() {
-	//vector<char>::const_iterator iter = Linker::instructions.begin();
-	
-	while( iter != instructions.end() ) {
-		wchar_t com;
-		
-		//stream.read((char*) &com, 2);
-		com  = 0;
-		com  = *(iter ++) & 0xff;
-		com |= *(iter ++) << 8;
-		
-		debug( "#! run_instructions" );
-		debug( hex );
-		debug( (int) *(iter - 2) << " " << (int) *(iter - 1) );
-		debug( com );
-		
-		Instruct instruct = head_unpack(com);
-	
-		bool has_arg = instruct.has_arg();
-		Code    code = instruct.code();
-		Reg       r1 = instruct.r1();
-		Reg       r2 = instruct.r2();
-		Reg       r3 = instruct.r3();
-		
-		if( !has_arg ) {
-			debug( "#! no arguments\n" );
-			Stack_CPU::commands_reg[code.val](r1, r2, r3);
-		} else {
-			debug( "#! has an argument\n" );
-			int arg;
-			
-			//stream.read((char*) &arg, 4);
-			arg  = 0;
-			arg |= (*(iter ++) & 0xff);
-			arg |= (*(iter ++) & 0xff) <<  8;
-			arg |= (*(iter ++) & 0xff) << (8 * 2);
-			arg |= (*(iter ++) & 0xff) << (8 * 3);
-			
-			Stack_CPU::commands_arg[code.val](r1, arg);
-		}
-	}
-	
-}*/
-	
-//~ void Stack_CPU::add_commands_arg(pair<Code, Com_Arg::execute_func_t> p) {
-	//~ Stack_CPU::commands_arg[p.first.val] = p.second;
-//~ }
-//~ 
-//~ void Stack_CPU::add_commands_reg(pair<Code, Com_Non::execute_func_t> p) {
-	//~ Stack_CPU::commands_reg[p.first.val] = p.second;
-//~ }
-
-//~ void Stack_CPU::dump_commands_arg(ostream& stream) {
-	//~ stream << "#! dump of Stack_CPU.commands_arg\n";
-	//~ assert(stream == cout);
-	//~ for (int i = 0; i < CODE_SIZE; i++) {
-		//~ stream << "#! [" << setw(3) << i << "] ";
-		//~ printf("%p\n", commands_arg[i]);
-	//~ }
-//~ }
-//~ 
-//~ void Stack_CPU::dump_commands_reg(ostream& stream) {
-	//~ stream << "#! dump of Stack_CPU.commands_reg\n";
-	//~ assert(stream == cout);
-	//~ for (int i = 0; i < CODE_SIZE; i++) {
-		//~ stream << "#! [" << setw(3) << i << "] ";
-		//~ printf("%p\n", commands_reg[i]);
-	//~ }
-//~ }
 
 }
 //////////////////////////////////////////////////////////////////////// 

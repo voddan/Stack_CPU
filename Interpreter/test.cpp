@@ -14,6 +14,7 @@
 #include <command.hpp>
 
 #include <stack_cpu.hpp>
+#include <linker.hpp>
 
 using namespace std;
 using namespace utils;
@@ -41,14 +42,12 @@ int main() {
 
 void test_load_instruct() {
 	print_test_name("test_load_instruct");
-	using namespace stack_cpu;
+	using namespace linker;
 	
 	ifstream input("a.out");
 	
-	Stack_CPU cpu;
-	
-	cpu.load_instruct(input);
-	cpu.dump_instruct(cout);
+	Linker::load_instructions(input);
+	Linker::dump_instructions(cout);
 }
 
 

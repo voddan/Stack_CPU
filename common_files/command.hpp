@@ -29,19 +29,10 @@ struct Reg : Printable{ // POD
 	explicit Reg(int x) : val((assert(0 <= x && x < REG_SIZE), x)) {}
 	const int val;
 	
-	//int* reg() {return linker::Linker::_registers[val];}
-	//int* reg() {return _registers[val];}
 	virtual string to_string() const;
-	
-	//~ static void dump_registers(ostream& stream);
-	//~ static void dump_registers_val(ostream& stream);
-	//---------------------------
-	
-	//static void load_registers(int arr[REG_SIZE]);
 	
 	private:
 		static const string _names[REG_SIZE];
-		//static int* _registers[REG_SIZE];
 };
 
 }

@@ -49,27 +49,12 @@ class Stack_CPU {
 	public:
 		Stack_CPU(): ip_reg(0), ret_reg(0) {
 			memset(regs, 0, REG_SIZE*sizeof(int)); 
-			//~ instructions.reserve(100);
 			Linker::load_registers(regs);
 		}
 		
-		//~ void dump_instructions	(ostream& stream);
-		//~ void dump_regs		(ostream& stream);
-		//~ void dump_user_stack	(ostream& stream);
-		//~ void dump_prog_stack	(ostream& stream);
-		//~ 
-		//~ 
-		//~ void dump_commands_arg	(ostream& stream);
-		//~ void dump_commands_reg	(ostream& stream);
-		
-		//------------------
-		//~ bool load_instructions(ifstream& stream);
 		void run_instructions();
 		
-		//~ static void add_commands_arg(pair<Code, Com_Arg::execute_func_t>);
-		//~ static void add_commands_reg(pair<Code, Com_Non::execute_func_t>);
-		
-	//private:
+	nondebug(private:)
 		const stack<int> user_stack;
 		const stack<int> prog_stack;
 		
@@ -77,11 +62,6 @@ class Stack_CPU {
 		unsigned ret_reg;
 		
 		int regs[REG_SIZE];
-		
-		//~ vector<char> instructions;
-		
-		//~ static Com_Arg::execute_func_t commands_arg[CODE_SIZE];
-		//~ static Com_Non::execute_func_t commands_reg[CODE_SIZE];
 };
 
 	

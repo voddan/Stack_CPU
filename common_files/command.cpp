@@ -12,16 +12,11 @@
 #include <utils.hpp>
 #include <consts.hpp>
 #include <command.hpp>
-//#include <linker.hpp>
 
 using namespace std;
 using namespace utils;
 
 namespace command { // Code; Reg
-	
-//~ int* Reg::reg() {
-	//~ return linker::Linker::_registers[val];
-//~ }
 	
 string Code::to_string() const { 
 	ostringstream str;
@@ -40,35 +35,10 @@ const string Reg::_names[] = {
 	"aa", "bb", "cc", "dd", "ee", "xx", "yy", "zz"
 };
 }
-//int* Reg::_registers[] = {};
-
-//~ void Reg::load_registers(int arr[REG_SIZE]) {
-	//~ for(int i = 0; i < REG_SIZE; i++) {
-		  //~ Reg::_registers[i] = (arr + i);
-		//~ *(Reg::_registers[i]) = 0;
-	//~ }
-//~ }
-
-//~ void Reg::dump_registers_val(ostream& stream) {
-	//~ stream << "#! dump of Reg::registers (values)" << endl;
-	//~ for(int i = 0; i < REG_SIZE; i++) {
-		//~ stream << "#! " << *(Reg::_registers[i]) << endl;
-	//~ }
-//~ }
-//~ 
-//~ void Reg::dump_registers(ostream& stream) {
-	//~ stream << "#! dump of Reg::registers (pointers)" << endl;
-	//~ for(int i = 0; i < REG_SIZE; i++) {
-		//~ stream << "#! " << Reg::_registers[i] << endl;
-	//~ }
-//~ }
-//~ 
-//~ }
 ////////////////////////////////////////////////////////////////////////
 
 namespace command { // Command; Command_list
 	
-		//TODO: use bytes()
 wchar_t Command::head_pack(bool has_arg, Code code, Reg r1, Reg r2, Reg r3) {
 	wchar_t arr = 0;
 	assert(CODE_SIZE == 64);
@@ -125,10 +95,6 @@ void Command_list::compile(ostream& stream) {
 
 namespace command { // Com_Arg; Com_Non
 	
-//typedef void (*Execute_func) ();
-	
-// TODO: add adress modification
-		
 string Com_Arg::to_string() const {
 	ostringstream str;
 	str << "Com_Arg(" << name() << ": "; 
