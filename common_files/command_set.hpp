@@ -10,6 +10,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <cstdio>
 
 #include <assert.h>
 
@@ -22,6 +23,23 @@ using namespace utils;
 using namespace command;
 using namespace linker;
 
+void write_template_command_reg(ostream& stream, Code code, Reg reg, Reg reg_1, Reg reg_2) {
+	stream << hex;
+	stream << "	mov rdi, " << "0" << code.val 	<< "h" << endl;
+	stream << "	mov rsi, " << "0" << reg.val 	<< "h" << endl;
+	stream << "	mov rdx, " << "0" << reg_1.val 	<< "h" << endl;
+	stream << "	mov rcx, " << "0" << reg_2.val 	<< "h" << endl;
+	stream << "	call run_command_reg" 	<< endl;
+}
+
+void write_template_command_arg(ostream& stream, Code code, Reg reg, int arg) {
+	stream << hex;
+	stream << "	mov rdi, " << "0" << code.val 	<< "h" << endl;
+	stream << "	mov rsi, " << "0" << reg.val 	<< "h" << endl;
+	stream << "	mov rcx, " << "0" << arg 	<< "h" << endl;
+	stream << "	call run_command_arg" 	<< endl;
+}
+
 namespace command_set { // Commands for REGisters
 	
 struct ADD : public Com_Non{
@@ -32,14 +50,14 @@ struct ADD : public Com_Non{
 		*(Linker::set_reg(reg)) = Linker::get_reg(reg_1) + Linker::get_reg(reg_2);
 	}
 	
-	// TODO
 	static void assembly(ostream& stream, Reg reg, Reg reg_1, Reg reg_2) {
-		//*(Linker::set_reg(reg)) = Linker::get_reg(reg_1) + Linker::get_reg(reg_2);
 		// wrong solution
-		execute_func_t pointer = ADD::execute;
-		stream << "call ";
-		stream << hex << pointer << "h "<< dec;
-		stream << "\t\t; add " << endl;
+		//~ execute_func_t pointer = ADD::execute;
+		//~ stream << "call ";
+		//~ stream << (void*) pointer << "h ";
+		//~ stream << "\t\t; add " << endl;
+		stream << "	; ADD " << endl;
+		write_template_command_reg(stream, _code, reg, reg_1, reg_2);
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
@@ -61,10 +79,9 @@ struct MOV : public Com_Non{
 	}
 	
 	static void assembly(ostream& stream, Reg reg, Reg reg_1, Reg reg_2) {
-		execute_func_t pointer = MOV::execute;
-		stream << "call ";
-		stream << hex << pointer << "h "<< dec;
-		stream << "\t\t; mov " << endl;
+		assert(!reg_2.val);
+		stream << "	; MOV " << endl;
+		write_template_command_reg(stream, _code, reg, reg_1, reg_2);
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
@@ -88,10 +105,11 @@ struct RET : public Com_Non{
 	}
 	
 	static void assembly(ostream& stream, Reg reg, Reg reg_1, Reg reg_2) {
-		execute_func_t pointer = RET::execute;
-		stream << "call ";
-		stream << hex << pointer << "h "<< dec;
-		stream << "\t\t; ret " << endl;
+		assert(!reg.val);
+		assert(!reg_1.val);
+		assert(!reg_2.val);
+		stream << "	; RET " << endl;
+		write_template_command_reg(stream, _code, reg, reg_1, reg_2);
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
@@ -120,10 +138,8 @@ struct SET : public Com_Arg{
 	}
 	
 	static void assembly(ostream& stream, Reg reg, int arg) {
-		execute_func_t pointer = SET::execute;
-		stream << "call ";
-		stream << hex << pointer << "h "<< dec;
-		stream << "\t\t; set " << endl;
+		stream << "	; SET " << endl;
+		write_template_command_arg(stream, _code, reg, arg);
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {

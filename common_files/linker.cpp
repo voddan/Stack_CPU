@@ -76,6 +76,15 @@ void Linker::run_command_reg(Code code, Reg reg, Reg reg_1, Reg reg_2) {
 	Linker::commands_reg[code.val](reg, reg_1, reg_2);
 }
 //-------------------------------
+void Linker::run_assembly_arg(ostream& stream, Code code, Reg reg, int arg) {
+	assert((Linker::assembly_arg[code.val]) && "unsupported command");
+	Linker::assembly_arg[code.val](stream, reg, arg);
+}
+void Linker::run_assembly_reg(ostream& stream, Code code, Reg reg, Reg reg_1, Reg reg_2) {
+	assert((Linker::assembly_reg[code.val]) && "unsupported command");
+	Linker::assembly_reg[code.val](stream, reg, reg_1, reg_2);
+}
+//-------------------------------
 wchar_t Linker::read_head() {
 	wchar_t result  = 0;
 	
@@ -105,6 +114,9 @@ int* Linker::_registers[] = {};
 
 Com_Arg::execute_func_t Linker::commands_arg[CODE_SIZE] = {};
 Com_Non::execute_func_t Linker::commands_reg[CODE_SIZE] = {};
+
+Com_Arg::assembly_func_t Linker::assembly_arg[CODE_SIZE] = {};
+Com_Non::assembly_func_t Linker::assembly_reg[CODE_SIZE] = {};
 
 vector<char> Linker::instructions;
 
@@ -148,6 +160,14 @@ void Linker::add_commands_reg(pair<Code, Com_Non::execute_func_t> p) {
 	Linker::commands_reg[p.first.val] = p.second;
 }
 
+void Linker::add_assembly_arg(pair<Code, Com_Arg::assembly_func_t> p) {
+	Linker::assembly_arg[p.first.val] = p.second;
+}
+
+void Linker::add_assembly_reg(pair<Code, Com_Non::assembly_func_t> p) {
+	Linker::assembly_reg[p.first.val] = p.second;
+}
+
 }
 ////////////////////////////////////////////////////////////////////////
 
@@ -168,6 +188,8 @@ void Linker::dump_registers(ostream& stream) {
 }
 	
 void Linker::dump_instructions(ostream& stream) {
+	debug("#! dump_instructions");
+	
 	const char names[16] = {
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 		'a', 'b', 'c', 'd', 'e', 'f' 
@@ -183,6 +205,8 @@ void Linker::dump_instructions(ostream& stream) {
 		count++;
 		if(count % 16 == 0) stream << "\n";
 	}
+	stream << endl;
+	debug("#! dump_instructions finished");
 }
 	
 void Linker::dump_commands_arg(ostream& stream) {
@@ -190,7 +214,8 @@ void Linker::dump_commands_arg(ostream& stream) {
 	assert(stream == cout);
 	for (int i = 0; i < CODE_SIZE; i++) {
 		stream << "#! [" << setw(3) << i << "] ";
-		printf("%p\n", commands_arg[i]);
+		//printf("%p\n", commands_arg[i]);
+		stream << (void*) commands_arg[i] << endl;
 	}
 }
 	
@@ -199,7 +224,28 @@ void Linker::dump_commands_reg(ostream& stream) {
 	assert(stream == cout);
 	for (int i = 0; i < CODE_SIZE; i++) {
 		stream << "#! [" << setw(3) << i << "] ";
-		printf("%p\n", commands_reg[i]);
+		//printf("%p\n", commands_reg[i]);
+		stream << (void*) assembly_reg[i] << endl;
+	}
+}
+	
+void Linker::dump_assembly_arg(ostream& stream) {
+	stream << "#! dump of Linker.assembly_arg\n";
+	assert(stream == cout);
+	for (int i = 0; i < CODE_SIZE; i++) {
+		stream << "#! [" << setw(3) << i << "] ";
+		//printf("%p\n", assembly_arg[i]);
+		stream << (void*) assembly_arg[i] << endl;
+	}
+}
+	
+void Linker::dump_assembly_reg(ostream& stream) {
+	stream << "#! dump of Linker.assembly_reg\n";
+	assert(stream == cout);
+	for (int i = 0; i < CODE_SIZE; i++) {
+		stream << "#! [" << setw(3) << i << "] ";
+		//printf("%p\n", assembly_reg[i]);
+		stream << (void*) assembly_reg[i] << endl;
 	}
 }
 	

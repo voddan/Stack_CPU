@@ -1,10 +1,13 @@
 #include <consts.hpp>
 
 #include <cstdio>
+#include <iostream>
 
 #include <stack_cpu.hpp>
 #include <command_set.hpp>
 #include <linker.hpp>
+
+using namespace std;
 
 using namespace stack_cpu;
 using namespace command_set;
@@ -45,6 +48,11 @@ void run_command_reg(int code, int reg, int reg_1, int reg_2) {
 	assert("0 <= reg_1 && reg_1 < REG_SIZE");
 	assert("0 <= reg_2 && reg_2 < REG_SIZE");
 	Linker::run_command_reg(Code(code), Reg(reg), Reg(reg_1), Reg(reg_2));
+}
+
+extern "C"
+void dump_registers_val() {
+	Linker::dump_registers_val(cout);
 }
 
 

@@ -42,6 +42,9 @@ struct Linker{
 	static void 	run_command_arg(Code code, Reg reg, int arg);
 	static void 	run_command_reg(Code code, Reg reg, Reg reg_1, Reg reg_2);
 	
+	static void 	run_assembly_arg(ostream&, Code code, Reg reg, int arg);
+	static void 	run_assembly_reg(ostream&, Code code, Reg reg, Reg reg_1, Reg reg_2);
+	
 	static wchar_t 	read_head();
 	static int 	read_arg();
 	//---------------------------
@@ -51,6 +54,9 @@ struct Linker{
 	// TODO: dump stacks
 	static void dump_commands_arg	(ostream& stream);
 	static void dump_commands_reg	(ostream& stream);
+	
+	static void dump_assembly_arg	(ostream& stream);
+	static void dump_assembly_reg	(ostream& stream);
 	
 	static void dump_instructions	(ostream& stream);
 	
@@ -65,6 +71,9 @@ struct Linker{
 	static void add_commands_arg(pair<Code, Com_Arg::execute_func_t>);
 	static void add_commands_reg(pair<Code, Com_Non::execute_func_t>);
 	
+	static void add_assembly_arg(pair<Code, Com_Arg::assembly_func_t>);
+	static void add_assembly_reg(pair<Code, Com_Non::assembly_func_t>);
+	
 	static bool load_instructions(ifstream& stream);
 	
 	//---------------------------
@@ -76,6 +85,9 @@ struct Linker{
 		
 		static Com_Arg::execute_func_t commands_arg[CODE_SIZE];
 		static Com_Non::execute_func_t commands_reg[CODE_SIZE];
+		
+		static Com_Arg::assembly_func_t assembly_arg[CODE_SIZE];
+		static Com_Non::assembly_func_t assembly_reg[CODE_SIZE];
 		
 		static unsigned* ip_register;
 		static unsigned* ret_register;

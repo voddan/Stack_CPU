@@ -2,7 +2,7 @@
 libs_list = common_files/command.o common_files/utils.o common_files/stack_cpu.o common_files/linker.o
 
 output: gen.o enviroment.o $(libs_list)
-	g++ gen.o enviroment.o  $(libs_list) -o output
+	g++ gen.o enviroment.o $(libs_list) -o output
 	chmod +x output
 	
 ########################################################################
@@ -43,3 +43,10 @@ run: clean output
 	@ls
 	@echo "|------------------------------------"
 	./output
+	
+########################################################################
+generator: generator.o $(libs_list)
+	g++ -Wall generator.o $(libs_list) -o generator
+	
+generator.o: generator.cpp
+	g++ -Wall -c -I"./" -I"./common_files/" generator.cpp -o generator.o 
