@@ -1,9 +1,9 @@
-output: generated.o enviroment.o
-	g++ generated.o enviroment.o -o output
+output: gen.o enviroment.o
+	g++ gen.o enviroment.o -o output
 	chmod +x output
 	
-generated.o: generated.asm
-	nasm -f elf64 generated.asm -o generated.o
+gen.o: gen.asm
+	nasm -f elf64 gen.asm -o gen.o
 	
 enviroment.o: enviroment.cpp
 	g++ -Wall -c enviroment.cpp -o enviroment.o

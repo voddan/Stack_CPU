@@ -84,6 +84,7 @@ struct Com_Arg : public Command{
 	//----------------
 	
 	typedef void (*execute_func_t)(Reg, int);
+	typedef void (*assembly_func_t)(ostream&, Reg, int);
 	
 	virtual void to_bytecode(ostream& stream);
 
@@ -105,6 +106,7 @@ struct Com_Non : public Command{
 	//----------------
 	
 	typedef void (*execute_func_t)(Reg, Reg, Reg);
+	typedef void (*assembly_func_t)(ostream&, Reg, Reg, Reg);
 	
 	virtual void to_bytecode(ostream& stream);
 

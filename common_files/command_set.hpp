@@ -32,8 +32,21 @@ struct ADD : public Com_Non{
 		*(Linker::set_reg(reg)) = Linker::get_reg(reg_1) + Linker::get_reg(reg_2);
 	}
 	
+	// TODO
+	static void assembly(ostream& stream, Reg reg, Reg reg_1, Reg reg_2) {
+		//*(Linker::set_reg(reg)) = Linker::get_reg(reg_1) + Linker::get_reg(reg_2);
+		// wrong solution
+		execute_func_t pointer = ADD::execute;
+		stream << "call ";
+		stream << hex << pointer << "h "<< dec;
+		stream << "\t\t; add " << endl;
+	}
+	
 	static pair<Code, execute_func_t> execute_indexed() {
 		return pair<Code, execute_func_t> (_code, ADD::execute);
+	}
+	static pair<Code, assembly_func_t> assembly_indexed() {
+		return pair<Code, assembly_func_t> (_code, ADD::assembly);
 	}
 	private: static const Code _code;
 };	
@@ -47,8 +60,18 @@ struct MOV : public Com_Non{
 		*(Linker::set_reg(reg)) = Linker::get_reg(reg_1);
 	}
 	
+	static void assembly(ostream& stream, Reg reg, Reg reg_1, Reg reg_2) {
+		execute_func_t pointer = MOV::execute;
+		stream << "call ";
+		stream << hex << pointer << "h "<< dec;
+		stream << "\t\t; mov " << endl;
+	}
+	
 	static pair<Code, execute_func_t> execute_indexed() {
 		return pair<Code, execute_func_t> (_code, MOV::execute);
+	}
+	static pair<Code, assembly_func_t> assembly_indexed() {
+		return pair<Code, assembly_func_t> (_code, MOV::assembly);
 	}
 	private: static const Code _code;
 };
@@ -64,8 +87,18 @@ struct RET : public Com_Non{
 		// should be unsaving of registers
 	}
 	
+	static void assembly(ostream& stream, Reg reg, Reg reg_1, Reg reg_2) {
+		execute_func_t pointer = RET::execute;
+		stream << "call ";
+		stream << hex << pointer << "h "<< dec;
+		stream << "\t\t; ret " << endl;
+	}
+	
 	static pair<Code, execute_func_t> execute_indexed() {
 		return pair<Code, execute_func_t> (_code, RET::execute);
+	}
+	static pair<Code, assembly_func_t> assembly_indexed() {
+		return pair<Code, assembly_func_t> (_code, RET::assembly);
 	}
 	private: static const Code _code;
 };
@@ -86,8 +119,18 @@ struct SET : public Com_Arg{
 		*(Linker::set_reg(reg)) = arg;
 	}
 	
+	static void assembly(ostream& stream, Reg reg, int arg) {
+		execute_func_t pointer = SET::execute;
+		stream << "call ";
+		stream << hex << pointer << "h "<< dec;
+		stream << "\t\t; set " << endl;
+	}
+	
 	static pair<Code, execute_func_t> execute_indexed() {
 		return pair<Code, execute_func_t> (_code, SET::execute);
+	}
+	static pair<Code, assembly_func_t> assembly_indexed() {
+		return pair<Code, assembly_func_t> (_code, SET::assembly);
 	}
 	private: static const Code _code;
 };
