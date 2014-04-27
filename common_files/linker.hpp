@@ -70,7 +70,8 @@ struct Linker{
 	//---------------------------
 	// TODO: operations with stacks
 	// TODO: operations special registers
-	nondebug(private:)
+	//nondebug(private:)
+	private:
 		static int* _registers[REG_SIZE];
 		
 		static Com_Arg::execute_func_t commands_arg[CODE_SIZE];

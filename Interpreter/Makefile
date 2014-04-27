@@ -2,11 +2,12 @@
 # g++ -Wall -o "%e" "%f"
 
 ## libs list ##
-libs_list = common_files/command.o common_files/utils.o stack_cpu.o common_files/linker.o
+libs_list = common_files/command.o common_files/utils.o common_files/stack_cpu.o common_files/linker.o
 
 
 ## main ##
 interpreter: BUILD.H interpreter.o $(libs_list)
+	## g++ -Wall -o "interpreter" "interpreter.o" $(libs_list)
 	g++ -Wall -I"./" -I"./common_files/"  -o "interpreter" "interpreter.o" $(libs_list)
 	
 interpreter.o: BUILD.H interpreter.cpp
@@ -23,9 +24,11 @@ test: BUILD.H test.o $(libs_list)
 test.o: BUILD.H test.cpp
 	g++ -Wall -I"./" -I"./common_files/"  -c "test.cpp"
 	
-## common_files/command.o lib ##
-stack_cpu.o: BUILD.H stack_cpu.hpp stack_cpu.cpp
-	g++ -Wall -I"./" -I"./common_files/"  -c "stack_cpu.cpp"
+########################################################################
+	
+## common_files/stack_cpu.o lib ##
+common_files/stack_cpu.o: BUILD.H ./common_files/stack_cpu.hpp ./common_files/stack_cpu.cpp
+	make -C common_files/ stack_cpu.o
 	
 ## common_files/command.o lib ##
 common_files/command.o: BUILD.H ./common_files/command.hpp ./common_files/command.cpp
@@ -41,6 +44,8 @@ common_files/linker.o: BUILD.H ./common_files/linker.hpp ./common_files/linker.c
 	
 BUILD.H:
 #nothing
+
+########################################################################
 
 clean:
 	rm "$(find . -type f -perm /+u+x)" &

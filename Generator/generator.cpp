@@ -9,15 +9,6 @@ string arr_top[] = {
 "; 64-bit \"Hello World!\" in Linux NASM               " ,
 "global main                                           " ,
 "                                                      " ,
-"extern dump_obj                                       " ,
-"extern init_obj                                       " ,
-"extern del_obj                                        " ,
-"                                                      " ,
-"extern obj;                                           " ,
-"extern head;                                          " ,
-"                                                      " ,
-";extern Obj_execute;                                  " ,
-"                                                      " ,
 "section .text                                         " ,
 "main:                                                 " ,
 "	; sys_write(stdout, message, length)           " ,
@@ -48,12 +39,41 @@ string arr_bottom[] = {
 "	syscall                                        " ,
 "                                                      " ,
 "section .data                                         " ,
-"message_start:		db 'started..' ,0x0A           " ,
+"message_start:		db '~~started..' ,0x0A         " ,
 "message_start_len 	equ $-message_start            " ,
 "                                                      " ,
-"message_finish:		db 'finished..',0x0A   " ,
+"message_finish:	db '~~finished..',0x0A         " ,
 "message_finish_len 	equ $-message_finish           " 
 };
+
+void run_instructions() {
+	
+	while( Linker::has_instruction() ) {
+		wchar_t head = Linker::read_head();
+		
+		debug( "#! run_instructions" );
+		debug( hex << head << dec );
+		
+		// unnecessary packing-unpacking into Instruct
+		Instruct instruct = head_unpack(head);
+		
+		bool has_arg = instruct.has_arg();
+		Code    code = instruct.code();
+		Reg       r1 = instruct.r1();
+		Reg       r2 = instruct.r2();
+		Reg       r3 = instruct.r3();
+		
+		if( !has_arg ) {
+			debug( "#! no arguments\n" );
+			Linker::run_command_reg(code, r1, r2, r3);
+		} else {
+			debug( "#! has an argument\n" );
+			int arg = Linker::read_arg();
+			Linker::run_command_arg(code, r1, arg);
+		}
+	}
+	
+}
 
 int main() {
 	vector<string> template_top 	(arr_top, arr_top + sizeof arr_top / sizeof arr_top[0]);
@@ -68,12 +88,19 @@ int main() {
 			iter != template_top.end(); iter ++ ) {
 		output << *iter << endl;	
 	}
+	////////////////////////////////
+	// just change the registers someway
+	output << "extern init" << endl;
+	output << "extern run_command_arg" << endl;
+	output << "extern run_command_reg" << endl;
 	
-	output << "	call init_obj" << endl;
-	output << "	call del_obj"  << endl;
+	output << "	call init" << endl;
+	///////////////////////////////
 	
 	
 	
+	
+	/////////////////////////////////
 	for ( vector<string>::const_iterator iter = template_bottom.begin();
 			iter != template_bottom.end(); iter ++ ) {
 		output << *iter << endl;	

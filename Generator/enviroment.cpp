@@ -1,47 +1,50 @@
+#include <consts.hpp>
+
 #include <cstdio>
+
+#include <stack_cpu.hpp>
+#include <command_set.hpp>
+#include <linker.hpp>
+
+using namespace stack_cpu;
+using namespace command_set;
+using namespace linker;
 //-----------------------------------------------------
-class Obj {
-	public:
-		Obj(int x): value(x) {}
-		static int state;
-		
-		void dump();
-		
-		static void execute();
-	private:
-		int value;
-};
 
-int Obj::state = 0;
+Stack_CPU cpu;
 
-Obj* obj;
-Obj head(0);
 //-----------------------------------------------------
 extern "C"
-void Obj::dump() {
-	printf("tdump_obj\n");
-	printf("state: %d\n", Obj::state);
-	printf("value: %d\n", obj->value);
+void init() {
+	printf("init.. \n");
+	Linker::load_ip_register (&(cpu.ip_reg ));
+	Linker::load_ret_register(&(cpu.ret_reg));
+
+	Linker::load_registers(cpu.regs);
+	
+	Linker::add_commands_arg(SET::execute_indexed());
+	Linker::add_commands_reg(ADD::execute_indexed());
+	Linker::add_commands_reg(MOV::execute_indexed());
+	Linker::add_commands_reg(RET::execute_indexed());
+	
+	Linker::set_ip_register(0);
+	Linker::set_ret_register(Linker::end_instruction());
 }
 
 extern "C"
-void init_obj() {
-	printf("init_obj\n");
-	obj = new Obj(239);
-	Obj::state = 45;
+void run_command_arg(int code, int reg, int arg) {
+	assert("0 <= code && code < CODE_SIZE");
+	assert("0 <= reg && reg < REG_SIZE");
+	Linker::run_command_arg(Code(code), Reg(reg), arg);
 }
 
 extern "C"
-void del_obj() {
-	printf("del_obj\n");
-	delete obj;
-	Obj::state = -13;
+void run_command_reg(int code, int reg, int reg_1, int reg_2) {
+	assert("0 <= code && code < CODE_SIZE");
+	assert("0 <= reg && reg < REG_SIZE");
+	assert("0 <= reg_1 && reg_1 < REG_SIZE");
+	assert("0 <= reg_2 && reg_2 < REG_SIZE");
+	Linker::run_command_reg(Code(code), Reg(reg), Reg(reg_1), Reg(reg_2));
 }
-
-extern "C"
-void Obj::execute() {
-	printf("execute\n");
-}
-
 
 
