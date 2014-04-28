@@ -2,7 +2,7 @@
 # g++ -Wall -o "%e" "%f"
 
 ## libs list ##
-libs_list = common_files/command.o common_files/utils.o common_files/linker.o
+libs_list = common_files/command.o common_files/utils.o common_files/linker.o token.o
 
 
 ## main ##
@@ -10,7 +10,7 @@ compiler: BUILD.H compiler.o $(libs_list)
 	g++ -Wall -I"./" -I"./common_files/"  -o "compiler" "compiler.o" $(libs_list)
 	
 compiler.o: BUILD.H compiler.cpp
-	g++ -Wall -I"./" -I"./common_files/"  -c "compiler.cpp"
+	g++ -Wall -I"./" -I"./common_files/"  -c "compiler.cpp" -o compiler.o
 	
 	
 ## test ##
@@ -23,6 +23,10 @@ test: BUILD.H test.o $(libs_list)
 test.o: BUILD.H test.cpp
 	g++ -Wall -I"./" -I"./common_files/"  -c "test.cpp"
 	
+	
+## token.o lib ##
+token.o: BUILD.H token.hpp token.cpp
+	g++ -Wall -I"./" -I"./common_files/" -c "token.cpp" -o token.o
 	
 ## common_files/command.o lib ##
 common_files/command.o: BUILD.H ./common_files/command.hpp ./common_files/command.cpp

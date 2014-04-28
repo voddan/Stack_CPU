@@ -100,6 +100,7 @@ int main() {
 	vector<string> template_bottom 	(arr_bottom, arr_bottom + sizeof arr_bottom / sizeof arr_bottom[0]);
 	
 	ofstream output("gen.asm");
+	//ofstream output("gen.asm");
 	
 	write_template(output, template_top);
 	////////////////////////////////
@@ -135,7 +136,8 @@ int main() {
 	
 	cout << "assembly functions are loaded" << endl;
 	
-	ifstream input("a.out");
+	ifstream input("ded.out");
+	//ifstream input("a.out");
 	Linker::load_instructions(input);
 	
 	cout << "instructions are loaded" << endl;
