@@ -2,6 +2,7 @@
  * 
  * Implementation for commamd.hpp
  * */
+#include <BUILD.H>
  
 #include <string>
 #include <list>
@@ -10,7 +11,6 @@
 #include <assert.h>
 
 #include <utils.hpp>
-#include <consts.hpp>
 #include <command.hpp>
 
 using namespace std;

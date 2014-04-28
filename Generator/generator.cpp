@@ -74,6 +74,7 @@ void assembly_instructions(ostream& stream) {
 		Reg       r2 = instruct.r2();
 		Reg       r3 = instruct.r3();
 		
+		stream << "label_" << hex << Linker::get_ip_register() << "_:" << endl;
 		if( !has_arg ) {
 			debug( "#! no arguments\n" );
 			Linker::run_assembly_reg(stream, code, r1, r2, r3);
@@ -145,6 +146,7 @@ int main() {
 	//!!!!!
 	assembly_instructions(output);
 	//!!!!!
+	output << "end:" << endl;
 	////////////////////////////////
 	
 	output << "call dump_registers_val" << endl;

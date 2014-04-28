@@ -9,7 +9,7 @@ output: gen.o enviroment.o $(libs_list)
 gen.o: gen.asm
 	nasm -f elf64 gen.asm -o gen.o
 	
-enviroment.o: enviroment.cpp
+enviroment.o: BUILD.H enviroment.cpp
 	g++ -Wall -c -I"./" -I"./common_files/" enviroment.cpp -o enviroment.o
 	
 ########################################################################
@@ -29,7 +29,7 @@ common_files/utils.o: BUILD.H ./common_files/utils.hpp ./common_files/utils.cpp
 common_files/linker.o: BUILD.H ./common_files/linker.hpp ./common_files/linker.cpp
 	make -C common_files/ linker.o
 	
-BUILD.H:
+BUILD.H: common_files/BUILD.H
 #nothing
 
 ########################################################################

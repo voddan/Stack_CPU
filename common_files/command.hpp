@@ -4,6 +4,7 @@
  
 #ifndef _COMMAND_HPP_
 #define _COMMAND_HPP_
+#include <BUILD.H>
  
 #include <string>
 #include <list>
@@ -12,7 +13,7 @@
 #include <assert.h>
 
 #include <utils.hpp>
-#include <consts.hpp>
+
 
 using namespace std;
 using namespace utils;
@@ -21,13 +22,17 @@ namespace command { // Code; Reg
 	
 struct Code : Printable{
 	explicit Code(int x) : val((assert(0 <= x && x < CODE_SIZE), x)) {}
+	//Code(const Code& code) : val(code.val) {}
 	const int val;
+	//int val;
+	
 	virtual string to_string() const;
 };
 
 struct Reg : Printable{ // POD
 	explicit Reg(int x) : val((assert(0 <= x && x < REG_SIZE), x)) {}
 	const int val;
+	//int val;
 	
 	virtual string to_string() const;
 	

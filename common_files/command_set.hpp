@@ -36,7 +36,7 @@ void write_template_command_arg(ostream& stream, Code code, Reg reg, int arg) {
 	stream << hex;
 	stream << "	mov rdi, " << "0" << code.val 	<< "h" << endl;
 	stream << "	mov rsi, " << "0" << reg.val 	<< "h" << endl;
-	stream << "	mov rcx, " << "0" << arg 	<< "h" << endl;
+	stream << "	mov rdx, " << "0" << arg 	<< "h" << endl;
 	stream << "	call run_command_arg" 	<< endl;
 }
 
@@ -109,7 +109,9 @@ struct RET : public Com_Non{
 		assert(!reg_1.val);
 		assert(!reg_2.val);
 		stream << "	; RET " << endl;
-		write_template_command_reg(stream, _code, reg, reg_1, reg_2);
+		//write_template_command_reg(stream, _code, reg, reg_1, reg_2);
+		// while there is no calls
+		stream << "	jmp end " << endl;
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
@@ -150,7 +152,34 @@ struct SET : public Com_Arg{
 	}
 	private: static const Code _code;
 };
+const Code SET::_code(3);
+		
+/*
+struct JMP : public Com_Arg{
+	JMP(Reg reg, int arg) : Com_Arg("jmp", _code, reg, arg) {}
+	
+	static void execute(Reg reg, int arg) {
+		debug( "#! JMP::execute " );
+		debug( "#!" << reg << " | " << Linker::get_reg(reg) << " | " << Linker::set_reg(reg) );
+		debug( "#!" << hex << arg << dec);
+		*(Linker::set_reg(reg)) = arg;
+	}
+	
+	static void assembly(ostream& stream, Reg reg, int arg) {
+		stream << "	; SET " << endl;
+		write_template_command_arg(stream, _code, reg, arg);
+	}
+	
+	static pair<Code, execute_func_t> execute_indexed() {
+		return pair<Code, execute_func_t> (_code, SET::execute);
+	}
+	static pair<Code, assembly_func_t> assembly_indexed() {
+		return pair<Code, assembly_func_t> (_code, SET::assembly);
+	}
+	private: static const Code _code;
+};
 const Code SET::_code(3);		
+*/
 
 }
 ////////////////////////////////////////////////////////////////////////

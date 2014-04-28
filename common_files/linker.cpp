@@ -2,6 +2,7 @@
  * 
  * Implementation for linker.hpp
  * */
+#include <BUILD.H>
  
 #include <string>
 #include <list>
@@ -15,7 +16,6 @@
 #include <assert.h>
 
 #include <utils.hpp>
-#include <consts.hpp>
 #include <command.hpp>
 
 #include <linker.hpp>
@@ -68,10 +68,12 @@ unsigned Linker::end_instruction() {
 }
 //---------------------------
 void Linker::run_command_arg(Code code, Reg reg, int arg) {
+	debug("Linker::run_command_arg");
 	assert((Linker::commands_arg[code.val]) && "unsupported command");
 	Linker::commands_arg[code.val](reg, arg);
 }
 void Linker::run_command_reg(Code code, Reg reg, Reg reg_1, Reg reg_2) {
+	debug("Linker::run_command_reg");
 	assert((Linker::commands_reg[code.val]) && "unsupported command");
 	Linker::commands_reg[code.val](reg, reg_1, reg_2);
 }

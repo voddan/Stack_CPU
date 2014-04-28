@@ -19,5 +19,5 @@ clean:
 	rm *.gch &
 	rm *.o
 	
-BUILD.H:
-#nothing
+BUILD.H: BUILD.H
+

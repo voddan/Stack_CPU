@@ -42,7 +42,7 @@ common_files/utils.o: BUILD.H ./common_files/utils.hpp ./common_files/utils.cpp
 common_files/linker.o: BUILD.H ./common_files/linker.hpp ./common_files/linker.cpp
 	make -C common_files/ linker.o
 	
-BUILD.H:
+BUILD.H: common_files/BUILD.H
 #nothing
 
 ########################################################################

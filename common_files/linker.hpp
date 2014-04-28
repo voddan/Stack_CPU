@@ -6,6 +6,7 @@
  
 #ifndef _LINKER_HPP_
 #define _LINKER_HPP_
+#include <BUILD.H>
  
 #include <string>
 #include <list>
@@ -14,8 +15,6 @@
 #include <assert.h>
 
 #include <utils.hpp>
-#include <consts.hpp>
-
 #include <command.hpp>
 
 using namespace std;
