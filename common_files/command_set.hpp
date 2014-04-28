@@ -154,32 +154,32 @@ struct SET : public Com_Arg{
 };
 const Code SET::_code(3);
 		
-/*
 struct JMP : public Com_Arg{
-	JMP(Reg reg, int arg) : Com_Arg("jmp", _code, reg, arg) {}
+	JMP(int arg) : Com_Arg("jmp", _code, Reg(0), arg) {}
 	
 	static void execute(Reg reg, int arg) {
 		debug( "#! JMP::execute " );
-		debug( "#!" << reg << " | " << Linker::get_reg(reg) << " | " << Linker::set_reg(reg) );
 		debug( "#!" << hex << arg << dec);
-		*(Linker::set_reg(reg)) = arg;
+		assert (0 <= arg);
+		Linker::set_ip_register(arg);
 	}
 	
 	static void assembly(ostream& stream, Reg reg, int arg) {
-		stream << "	; SET " << endl;
-		write_template_command_arg(stream, _code, reg, arg);
+		assert (0 <= arg);
+		stream << "	; JMP " << endl;
+		stream << "	jmp " << hex;
+		stream << "label_" << arg <<  "_" <<  endl;
 	}
 	
 	static pair<Code, execute_func_t> execute_indexed() {
-		return pair<Code, execute_func_t> (_code, SET::execute);
+		return pair<Code, execute_func_t> (_code, JMP::execute);
 	}
 	static pair<Code, assembly_func_t> assembly_indexed() {
-		return pair<Code, assembly_func_t> (_code, SET::assembly);
+		return pair<Code, assembly_func_t> (_code, JMP::assembly);
 	}
 	private: static const Code _code;
 };
-const Code SET::_code(3);		
-*/
+const Code JMP::_code(4);		
 
 }
 ////////////////////////////////////////////////////////////////////////

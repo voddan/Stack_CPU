@@ -27,6 +27,7 @@ void print_test_name(string name){
 
 void test_Command();
 void test_Command_compile();
+void test_compiler_to_bytecode();
 
 int main() {
 	print_test_name("file test.cpp from Stack_CPU for testing");
@@ -34,6 +35,8 @@ int main() {
 	test_Command();
 	
 	test_Command_compile();
+	
+	test_compiler_to_bytecode();
 	
 	return 0;
 }
@@ -69,7 +72,7 @@ void test_Command_compile() {
 	list << new MOV(Reg(3), Reg(1));
 	cout << list;
 
-	ofstream output("test.out");
+	ofstream output("test_Command_compile.out");
 	list.to_bytecode(output);
 }
 
@@ -98,4 +101,43 @@ void test_command_Reg_registers() {
 	func2(Reg(0), 239);
 	
 	Linker::dump_registers_val(cout); 
+}
+
+void test_compiler_to_bytecode() {
+	print_test_name("test_compiler_to_bytecode");
+	
+	using namespace std;
+	using namespace utils;
+	using namespace command;
+	using namespace command_set;
+	
+	Command_list list;
+	// 0
+	list << new SET(Reg(0), 64);
+	list << new SET(Reg(1), 128);
+	list << new SET(Reg(2), 255);
+	list << new SET(Reg(3), 512);
+	list << new SET(Reg(4), 1024);
+	// 30
+	
+	list << new JMP(46);
+	// 36
+	
+	list << new ADD(Reg(6), Reg(0), Reg(6));
+	list << new ADD(Reg(6), Reg(1), Reg(6));
+	list << new ADD(Reg(6), Reg(2), Reg(6));
+	list << new ADD(Reg(6), Reg(3), Reg(6));
+	list << new ADD(Reg(6), Reg(4), Reg(6));
+	// 46
+	
+	list << new MOV(Reg(7), Reg(6));
+	// 48
+	
+	list << new RET();
+	// 50
+	/////////////
+	cout << list;
+
+	ofstream output("test_compiler_to_bytecode.out");
+	list.to_bytecode(output);
 }

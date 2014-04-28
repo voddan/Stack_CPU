@@ -60,6 +60,8 @@ string arr_bottom[] = {
 
 void assembly_instructions(ostream& stream) {
 	while( Linker::has_instruction() ) {
+		stream << "label_" << hex << Linker::get_ip_register() << "_:" << endl;
+		
 		wchar_t head = Linker::read_head();
 		
 		debug( "#! run_instructions" );
@@ -74,7 +76,6 @@ void assembly_instructions(ostream& stream) {
 		Reg       r2 = instruct.r2();
 		Reg       r3 = instruct.r3();
 		
-		stream << "label_" << hex << Linker::get_ip_register() << "_:" << endl;
 		if( !has_arg ) {
 			debug( "#! no arguments\n" );
 			Linker::run_assembly_reg(stream, code, r1, r2, r3);
@@ -126,6 +127,8 @@ int main() {
 	Linker::load_ip_register(&instruction_pointer);
 	
 	Linker::add_assembly_arg(SET::assembly_indexed());
+	Linker::add_assembly_arg(JMP::assembly_indexed());
+	
 	Linker::add_assembly_reg(ADD::assembly_indexed());
 	Linker::add_assembly_reg(MOV::assembly_indexed());
 	Linker::add_assembly_reg(RET::assembly_indexed());

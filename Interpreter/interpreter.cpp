@@ -30,11 +30,15 @@ int main() {
 	//-------------------------
 	Linker::load_ip_register (&(cpu.ip_reg ));
 	Linker::load_ret_register(&(cpu.ret_reg));
-	
-	Linker::add_commands_arg(SET::execute_indexed());
+
+	//----------
 	Linker::add_commands_reg(ADD::execute_indexed());
 	Linker::add_commands_reg(MOV::execute_indexed());
 	Linker::add_commands_reg(RET::execute_indexed());
+	
+	Linker::add_commands_arg(SET::execute_indexed());
+	Linker::add_commands_arg(JMP::execute_indexed());
+	//----------
 	
 	Linker::load_registers(cpu.regs);
 	 

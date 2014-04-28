@@ -26,6 +26,8 @@ void init() {
 	Linker::load_registers(cpu.regs);
 	
 	Linker::add_commands_arg(SET::execute_indexed());
+	Linker::add_commands_arg(JMP::execute_indexed());
+	
 	Linker::add_commands_reg(ADD::execute_indexed());
 	Linker::add_commands_reg(MOV::execute_indexed());
 	Linker::add_commands_reg(RET::execute_indexed());

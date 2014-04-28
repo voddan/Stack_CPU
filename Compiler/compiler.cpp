@@ -26,22 +26,31 @@ using namespace command_set;
 int main() {
 	 
 	Command_list list;
-	
+	// 0
 	list << new SET(Reg(0), 64);
 	list << new SET(Reg(1), 128);
 	list << new SET(Reg(2), 255);
 	list << new SET(Reg(3), 512);
 	list << new SET(Reg(4), 1024);
+	// 30
+	
+	list << new JMP(46);
+	// 36
 	
 	list << new ADD(Reg(6), Reg(0), Reg(6));
 	list << new ADD(Reg(6), Reg(1), Reg(6));
 	list << new ADD(Reg(6), Reg(2), Reg(6));
 	list << new ADD(Reg(6), Reg(3), Reg(6));
 	list << new ADD(Reg(6), Reg(4), Reg(6));
+	// 46
+	
+	//~ int moving = list.size();
 	
 	list << new MOV(Reg(7), Reg(6));
+	// 48
 	
 	list << new RET();
+	// 50
 	
 	
 	/////////////
